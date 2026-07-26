@@ -1,4 +1,4 @@
-import defaultBackground from '../assets/blog-placeholder-1.webp';
+import defaultBackground from '../assets/hero-lunarscoop-alt.jpg';
 
 /**
  * Hero copy and background settings for one page.
@@ -35,8 +35,8 @@ export interface HeroConfig {
 
 export const heroConfig: HeroConfig = {
   home: {
-    text: 'Learn, build, and write.',
-    subtitle: 'Mathematics, computer science, and projects in progress.',
+    text: 'Writing down what I learn along the way',
+    subtitle: 'Learning as I go',
     backgroundImage: defaultBackground.src,
   },
   blog: {
