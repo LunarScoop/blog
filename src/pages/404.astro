@@ -1,0 +1,33 @@
+---
+import ButtonLink from "../components/shared/ButtonLink.astro";
+import Container from "../components/shared/Container.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="页面未找到" description="这个页面暂时不在知识花园里喵~" noindex>
+  <section class="grid min-h-[68dvh] place-items-center py-16">
+    <Container>
+      <div class="mx-auto max-w-2xl text-center">
+        <p
+          class="font-mono text-sm font-bold tracking-[0.24em] text-indigo-700 dark:text-indigo-300"
+        >
+          404
+        </p>
+        <h1
+          class="page-title mt-5 font-display text-4xl font-semibold tracking-[-0.03em] text-stone-950 sm:text-6xl dark:text-stone-50"
+        >
+          这条路径还没有长出内容喵~
+        </h1>
+        <p
+          class="mx-auto mt-6 max-w-xl text-base leading-8 text-stone-600 sm:text-lg dark:text-stone-400"
+        >
+          链接可能已经移动，也可能只是写错了一点点，可以回到首页或使用搜索重新找到它喵~
+        </p>
+        <div class="mt-9 flex flex-wrap justify-center gap-3">
+          <ButtonLink href="/" variant="primary">返回首页</ButtonLink>
+          <ButtonLink href="/search" variant="secondary">搜索内容</ButtonLink>
+        </div>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

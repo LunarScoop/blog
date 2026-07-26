@@ -1,0 +1,41 @@
+---
+import FeaturedProjects from "../components/home/FeaturedProjects.astro";
+import Hero from "../components/home/Hero.astro";
+import KnowledgeOverview from "../components/home/KnowledgeOverview.astro";
+import LatestThoughts from "../components/home/LatestThoughts.astro";
+import LearningNow from "../components/home/LearningNow.astro";
+import RecentNotes from "../components/home/RecentNotes.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCurrentlyLearning, getNotes, getRecentNotes } from "../utils/notes";
+import { getFeaturedProjects, getProjects } from "../utils/projects";
+import { getLatestThoughts, getThoughts } from "../utils/thoughts";
+
+const [
+  notes,
+  projects,
+  thoughts,
+  currentlyLearning,
+  recentNotes,
+  featuredProjects,
+  latestThoughts,
+] = await Promise.all([
+  getNotes(),
+  getProjects(),
+  getThoughts(),
+  getCurrentlyLearning(3),
+  getRecentNotes(4),
+  getFeaturedProjects(),
+  getLatestThoughts(3),
+]);
+---
+
+<BaseLayout>
+  <Hero noteCount={notes.length} projectCount={projects.length} thoughtCount={thoughts.length} />
+  <div id="home-content">
+    <LearningNow notes={currentlyLearning} />
+    <KnowledgeOverview notes={notes} />
+    <RecentNotes notes={recentNotes} />
+    <FeaturedProjects projects={featuredProjects} />
+    <LatestThoughts thoughts={latestThoughts} />
+  </div>
+</BaseLayout>

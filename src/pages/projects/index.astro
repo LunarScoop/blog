@@ -1,0 +1,46 @@
+---
+import Container from "../../components/shared/Container.astro";
+import ProjectCard from "../../components/projects/ProjectCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getProjects } from "../../utils/projects";
+
+const projects = await getProjects();
+---
+
+<BaseLayout title="Projects" description="个人项目实践与技术实现记录喵~">
+  <section class="page-section">
+    <Container>
+      <div class="page-header">
+        <p
+          class="page-kicker text-xs font-bold tracking-[0.22em] text-indigo-700 uppercase dark:text-indigo-300"
+        >
+          Projects
+        </p>
+        <h1
+          class="page-title mt-5 font-display text-4xl font-semibold tracking-[-0.03em] text-stone-950 sm:text-6xl dark:text-stone-50"
+        >
+          让知识在真实项目里接受检验喵~
+        </h1>
+        <p
+          class="page-description mt-6 text-base leading-8 text-stone-600 sm:text-lg dark:text-stone-400"
+        >
+          每个项目都记录目标、技术选择与实现进度，让理论知识落到可以运行和复盘的作品中喵~
+        </p>
+      </div>
+
+      {
+        projects.length > 0 ? (
+          <div class="mt-12 grid gap-6 md:grid-cols-2">
+            {projects.map((project) => (
+              <ProjectCard project={project} />
+            ))}
+          </div>
+        ) : (
+          <p class="mt-12 rounded-2xl border border-dashed border-stone-300 p-8 text-stone-500 dark:border-stone-700 dark:text-stone-400">
+            项目正在整理中，稍后回来看看吧喵~
+          </p>
+        )
+      }
+    </Container>
+  </section>
+</BaseLayout>

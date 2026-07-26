@@ -1,0 +1,88 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+const visibleHeadings = headings.filter(({ depth }) => depth === 2 || depth === 3);
+---
+
+<section data-table-of-contents>
+  <p class="text-xs font-bold tracking-[0.18em] text-stone-400 uppercase">On this page</p>
+  <h2 class="mt-2 font-display text-lg font-bold text-stone-950 dark:text-stone-50">本页目录</h2>
+
+  {
+    visibleHeadings.length > 0 ? (
+      <nav class="mt-4" aria-label="本页目录">
+        <ol class="space-y-1 border-l border-stone-200 dark:border-stone-800">
+          {visibleHeadings.map((heading, index) => (
+            <li>
+              <a
+                href={`#${heading.slug}`}
+                data-toc-link={heading.slug}
+                aria-current={index === 0 ? "location" : undefined}
+                class:list={[
+                  "-ml-px block border-l px-3 py-1.5 text-sm leading-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700 dark:focus-visible:outline-indigo-300",
+                  heading.depth === 3 && "pl-6 text-xs",
+                  index === 0
+                    ? "border-indigo-600 font-semibold text-indigo-700 dark:border-indigo-400 dark:text-indigo-300"
+                    : "border-transparent text-stone-500 hover:border-stone-400 hover:text-stone-900 dark:text-stone-400 dark:hover:border-stone-500 dark:hover:text-stone-100",
+                ]}
+              >
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    ) : (
+      <p class="mt-4 text-sm leading-6 text-stone-500 dark:text-stone-400">
+        这篇笔记暂时没有分节目录喵~
+      </p>
+    )
+  }
+</section>
+
+<script>
+  const tocRoots = document.querySelectorAll<HTMLElement>("[data-table-of-contents]");
+
+  tocRoots.forEach((root) => {
+    const links = Array.from(root.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"));
+    const headingElements = links
+      .map((link) => document.getElementById(link.dataset.tocLink ?? ""))
+      .filter((heading): heading is HTMLElement => heading !== null);
+
+    if (headingElements.length === 0) {
+      return;
+    }
+
+    const setCurrentHeading = () => {
+      const offset = 124;
+      let currentHeading = headingElements[0];
+
+      for (const heading of headingElements) {
+        if (heading.getBoundingClientRect().top <= offset) {
+          currentHeading = heading;
+        } else {
+          break;
+        }
+      }
+
+      links.forEach((link) => {
+        const isCurrent = link.dataset.tocLink === currentHeading.id;
+        link.classList.toggle("toc-link-current", isCurrent);
+
+        if (isCurrent) {
+          link.setAttribute("aria-current", "location");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    };
+
+    setCurrentHeading();
+    document.addEventListener("scroll", setCurrentHeading, { passive: true });
+  });
+</script>

@@ -1,0 +1,5 @@
+.astro
+dist
+node_modules
+pnpm-lock.yaml
+personal-knowledge-garden-development-spec.md

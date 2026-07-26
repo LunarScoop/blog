@@ -1,0 +1,23 @@
+# build output
+dist/
+
+# generated Astro files
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+*.log
+
+# environment variables
+.env
+.env.*
+!.env.example
+
+# editor and operating-system files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db

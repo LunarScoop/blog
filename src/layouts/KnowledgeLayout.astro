@@ -1,0 +1,122 @@
+---
+import type { MarkdownHeading } from "astro";
+import KnowledgeSidebar from "../components/learn/KnowledgeSidebar.astro";
+import NoteMeta from "../components/learn/NoteMeta.astro";
+import NoteNavigation from "../components/learn/NoteNavigation.astro";
+import RelatedNotes from "../components/learn/RelatedNotes.astro";
+import TableOfContents from "../components/learn/TableOfContents.astro";
+import MarkdownContent from "../components/markdown/MarkdownContent.astro";
+import MobileDrawer from "../components/shared/MobileDrawer.astro";
+import { getDomainConfig, getSubjectConfig, getTopicLabel } from "../config/subjects";
+import type { NoteEntry } from "../utils/notes";
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  note: NoteEntry;
+  allNotes: NoteEntry[];
+  headings: MarkdownHeading[];
+  previous?: NoteEntry;
+  next?: NoteEntry;
+  relatedNotes: NoteEntry[];
+}
+
+const { note, allNotes, headings, previous, next, relatedNotes } = Astro.props;
+const domain = getDomainConfig(note.data.domain);
+const subject = getSubjectConfig(note.data.subject);
+const topicLabel = getTopicLabel(note.data.topic);
+---
+
+<BaseLayout
+  title={note.data.title}
+  description={note.data.description}
+  type="article"
+  publishedTime={note.data.created}
+  updatedTime={note.data.updated}
+>
+  <div
+    class="sticky top-16 z-30 border-b border-stone-200/90 bg-white/95 px-5 py-3 backdrop-blur-xl xl:hidden dark:border-stone-800 dark:bg-[#0f1117]/95"
+    data-pagefind-ignore
+  >
+    <div class="mx-auto flex max-w-3xl gap-3">
+      <MobileDrawer id="knowledge-chapters" label="章节" title="课程知识树" icon="☰" side="left">
+        <KnowledgeSidebar notes={allNotes} currentNote={note} />
+      </MobileDrawer>
+      <MobileDrawer id="knowledge-toc" label="目录" title="本页目录" icon="#" side="right">
+        <TableOfContents headings={headings} />
+      </MobileDrawer>
+    </div>
+  </div>
+
+  <div
+    class="mx-auto grid w-full max-w-[96rem] grid-cols-1 gap-8 px-5 py-8 sm:px-8 lg:py-12 xl:grid-cols-[13rem_minmax(0,48rem)_12rem] xl:items-start xl:gap-6 2xl:grid-cols-[15rem_minmax(0,48rem)_14rem] 2xl:gap-10"
+  >
+    <aside class="sticky top-22 hidden max-h-[calc(100dvh-6.5rem)] overflow-y-auto pr-2 xl:block">
+      <KnowledgeSidebar notes={allNotes} currentNote={note} />
+    </aside>
+
+    <div class="min-w-0">
+      <article class="material-surface overflow-hidden" data-pagefind-body>
+        <header class="px-6 py-8 sm:px-10 sm:py-11">
+          <nav class="flex flex-wrap items-center gap-2 text-sm text-stone-500" aria-label="面包屑">
+            <a
+              href="/learn"
+              class="rounded-sm transition hover:text-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700 dark:text-stone-400 dark:hover:text-indigo-300 dark:focus-visible:outline-indigo-300"
+            >
+              Learn
+            </a>
+            <span aria-hidden="true">/</span>
+            <span>{domain?.label ?? note.data.domain}</span>
+            <span aria-hidden="true">/</span>
+            <span>{subject?.label ?? note.data.subject}</span>
+            {note.data.topic && <span aria-hidden="true">/</span>}
+            {note.data.topic && <span>{topicLabel}</span>}
+          </nav>
+
+          <p
+            class="page-kicker mt-8 text-xs font-bold tracking-[0.2em] text-indigo-700 uppercase dark:text-indigo-300"
+          >
+            {subject?.englishLabel ?? note.data.subject} · {topicLabel}
+          </p>
+          <h1
+            class="page-title mt-4 font-display text-4xl font-bold tracking-[-0.035em] text-balance text-stone-950 sm:text-5xl dark:text-stone-50"
+            data-pagefind-meta="title"
+          >
+            {note.data.title}
+          </h1>
+          <span data-pagefind-meta="type:Learn" hidden></span>
+          <span data-pagefind-meta={`section:${subject?.label ?? note.data.subject}`} hidden></span>
+          {
+            note.data.description && (
+              <p class="page-description mt-5 max-w-2xl text-base leading-8 text-stone-600 sm:text-lg dark:text-stone-300">
+                {note.data.description}
+              </p>
+            )
+          }
+          <NoteMeta data={note.data} />
+        </header>
+
+        <div class="border-t border-stone-200 px-6 py-8 sm:px-10 sm:py-11 dark:border-stone-800">
+          <MarkdownContent>
+            <slot />
+          </MarkdownContent>
+        </div>
+      </article>
+
+      <footer class="mt-8" data-pagefind-ignore>
+        <NoteNavigation previous={previous} next={next} />
+        <RelatedNotes notes={relatedNotes} />
+        <a
+          href="/learn"
+          class="material-link mt-8 inline-flex min-h-11 items-center gap-2 px-3 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700 dark:focus-visible:outline-indigo-300"
+        >
+          <span aria-hidden="true">←</span>
+          返回 Learn · {subject?.label ?? note.data.subject}
+        </a>
+      </footer>
+    </div>
+
+    <aside class="sticky top-22 hidden max-h-[calc(100dvh-6.5rem)] overflow-y-auto xl:block">
+      <TableOfContents headings={headings} />
+    </aside>
+  </div>
+</BaseLayout>

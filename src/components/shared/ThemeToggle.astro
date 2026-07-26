@@ -1,0 +1,79 @@
+<button
+  type="button"
+  data-theme-toggle
+  class="header-control inline-flex size-10 items-center justify-center rounded-xl border border-transparent text-lg text-stone-700 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700 motion-reduce:transition-none dark:text-stone-200 dark:focus-visible:outline-indigo-300"
+  aria-label="切换至深色模式"
+  title="切换至深色模式"
+>
+  <span data-theme-icon="sun" aria-hidden="true">☀</span>
+  <span data-theme-icon="moon" aria-hidden="true">☾</span>
+</button>
+
+<script>
+  type Theme = "light" | "dark";
+
+  const storageKey = "knowledge-garden-theme";
+  const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+  const toggles = document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]");
+
+  const getStoredTheme = (): Theme | null => {
+    try {
+      const value = window.localStorage.getItem(storageKey);
+      return value === "light" || value === "dark" ? value : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const getCurrentTheme = (): Theme =>
+    document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+
+  const updateControls = (theme: Theme) => {
+    const nextThemeLabel = theme === "dark" ? "浅色" : "深色";
+
+    toggles.forEach((toggle) => {
+      const label = `切换至${nextThemeLabel}模式`;
+      toggle.setAttribute("aria-label", label);
+      toggle.setAttribute("title", label);
+    });
+  };
+
+  const applyTheme = (theme: Theme, persist = false) => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    updateControls(theme);
+    window.dispatchEvent(
+      new CustomEvent("knowledge-garden:theme-change", {
+        detail: { theme },
+      }),
+    );
+
+    if (persist) {
+      try {
+        window.localStorage.setItem(storageKey, theme);
+      } catch {
+        // The selected theme still applies when storage is unavailable.
+      }
+    }
+  };
+
+  updateControls(getCurrentTheme());
+
+  toggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      applyTheme(getCurrentTheme() === "dark" ? "light" : "dark", true);
+    });
+  });
+
+  systemTheme.addEventListener("change", (event) => {
+    if (getStoredTheme() === null) {
+      applyTheme(event.matches ? "dark" : "light");
+    }
+  });
+
+  window.addEventListener("storage", (event) => {
+    if (event.key === storageKey) {
+      applyTheme(event.newValue === "dark" ? "dark" : "light");
+    }
+  });
+</script>

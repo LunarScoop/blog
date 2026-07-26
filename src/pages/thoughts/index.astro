@@ -1,0 +1,46 @@
+---
+import Container from "../../components/shared/Container.astro";
+import ThoughtCard from "../../components/thoughts/ThoughtCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getThoughts } from "../../utils/thoughts";
+
+const thoughts = await getThoughts();
+---
+
+<BaseLayout title="Thoughts" description="学习总结、阶段复盘与技术思考喵~">
+  <section class="page-section">
+    <Container>
+      <div class="page-header">
+        <p
+          class="page-kicker text-xs font-bold tracking-[0.22em] text-indigo-700 uppercase dark:text-indigo-300"
+        >
+          Thoughts
+        </p>
+        <h1
+          class="page-title mt-5 font-display text-4xl font-semibold tracking-[-0.03em] text-stone-950 sm:text-6xl dark:text-stone-50"
+        >
+          记录结论之外，那些仍在形成的想法喵~
+        </h1>
+        <p
+          class="page-description mt-6 text-base leading-8 text-stone-600 sm:text-lg dark:text-stone-400"
+        >
+          这里收录学习总结、阶段复盘与尚在形成的技术判断，并按照发布时间从新到旧排列喵~
+        </p>
+      </div>
+
+      {
+        thoughts.length > 0 ? (
+          <div class="mt-12 grid gap-6 md:grid-cols-2">
+            {thoughts.map((thought) => (
+              <ThoughtCard thought={thought} />
+            ))}
+          </div>
+        ) : (
+          <p class="mt-12 rounded-2xl border border-dashed border-stone-300 p-8 text-stone-500 dark:border-stone-700 dark:text-stone-400">
+            随想正在整理中，稍后回来看看吧喵~
+          </p>
+        )
+      }
+    </Container>
+  </section>
+</BaseLayout>

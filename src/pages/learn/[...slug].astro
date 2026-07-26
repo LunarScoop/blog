@@ -1,0 +1,37 @@
+---
+import { render } from "astro:content";
+import { getNoteRoutePath } from "../../config/subjects";
+import KnowledgeLayout from "../../layouts/KnowledgeLayout.astro";
+import { getAdjacentNotes, getRelatedNotes } from "../../utils/knowledge";
+import { getNotes, type NoteEntry } from "../../utils/notes";
+
+interface Props {
+  note: NoteEntry;
+  allNotes: NoteEntry[];
+}
+
+export async function getStaticPaths() {
+  const notes = await getNotes();
+
+  return notes.map((note) => ({
+    params: { slug: getNoteRoutePath(note.id) },
+    props: { note, allNotes: notes },
+  }));
+}
+
+const { note, allNotes } = Astro.props;
+const { Content, headings } = await render(note);
+const { previous, next } = getAdjacentNotes(note, allNotes);
+const relatedNotes = getRelatedNotes(note, allNotes);
+---
+
+<KnowledgeLayout
+  note={note}
+  allNotes={allNotes}
+  headings={headings}
+  previous={previous}
+  next={next}
+  relatedNotes={relatedNotes}
+>
+  <Content />
+</KnowledgeLayout>

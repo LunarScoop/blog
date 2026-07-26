@@ -1,0 +1,33 @@
+---
+title: "时间复杂度速览"
+description: "用 MDX 表达式展示常见时间复杂度的增长层级喵~"
+domain: computer-science
+subject: data-structures
+topic: complexity
+type: knowledge
+tags:
+  - 算法
+  - 复杂度
+difficulty: easy
+status: learning
+related: []
+created: 2026-07-24
+updated: 2026-07-24
+draft: false
+---
+
+export const complexityLevels = ["O(1)", "O(log n)", "O(n)", "O(n log n)"];
+
+MDX 允许在 Markdown 内容中使用 JavaScript 表达式与组件化标记，适合制作更有结构的知识卡片喵~
+
+<div className="mdx-demo-grid" data-mdx-demo>
+  {complexityLevels.map((level) => (
+    <span>{level}</span>
+  ))}
+</div>
+
+> [!TIP]
+>
+> 时间复杂度描述输入规模增长时操作次数的变化趋势，并不直接等同于真实运行时间喵~
+
+当问题规模为 $n$ 时，线性查找的操作次数通常可表示为 $T(n)=an+b$，因此其渐进复杂度为 $O(n)$ 喵~

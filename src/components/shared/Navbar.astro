@@ -1,0 +1,214 @@
+---
+import { NAVIGATION } from "../../config/navigation";
+import { SITE } from "../../config/site";
+import Container from "./Container.astro";
+import SearchButton from "./SearchButton.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+
+const currentPath = Astro.url.pathname.replace(/\/+$/, "") || "/";
+
+const isActive = (href: string) =>
+  href === "/" ? currentPath === "/" : currentPath === href || currentPath.startsWith(`${href}/`);
+---
+
+<header class="site-header sticky top-0 z-40 border-b backdrop-blur-xl" data-pagefind-ignore>
+  <Container>
+    <nav class="flex h-16 items-center justify-between gap-5" aria-label="主导航">
+      <a
+        href="/"
+        class="inline-flex items-center gap-3 rounded-lg font-semibold tracking-tight text-stone-950 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-700 dark:text-stone-50 dark:focus-visible:outline-indigo-300"
+        aria-label={`${SITE.name} 首页`}
+      >
+        <span
+          class="grid size-9 place-items-center rounded-lg bg-indigo-600 text-xs font-bold tracking-wide text-white shadow-sm dark:bg-indigo-500"
+          aria-hidden="true"
+        >
+          {SITE.shortName}
+        </span>
+        <span class="hidden font-display sm:inline">{SITE.name}</span>
+      </a>
+
+      <div class="hidden h-full items-center gap-1 lg:flex">
+        {
+          NAVIGATION.map((item) => (
+            <a
+              href={item.href}
+              class:list={[
+                "main-nav-link relative inline-flex h-full items-center px-3 text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-indigo-700 motion-reduce:transition-none dark:focus-visible:outline-indigo-300",
+                isActive(item.href)
+                  ? "main-nav-link-active text-stone-950 dark:text-stone-50"
+                  : "text-stone-600 hover:text-indigo-700 dark:text-stone-400 dark:hover:text-indigo-300",
+              ]}
+              aria-current={isActive(item.href) ? "page" : undefined}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="flex items-center gap-2">
+        <SearchButton />
+        <ThemeToggle />
+        <button
+          type="button"
+          data-mobile-menu-open
+          class="header-control inline-flex size-10 items-center justify-center rounded-xl text-stone-700 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700 motion-reduce:transition-none lg:hidden dark:text-stone-200 dark:focus-visible:outline-indigo-300"
+          aria-label="打开导航菜单"
+          aria-controls="mobile-navigation"
+          aria-expanded="false"
+        >
+          <span class="flex flex-col gap-1.5" aria-hidden="true">
+            <span class="block h-px w-4 bg-current"></span>
+            <span class="block h-px w-4 bg-current"></span>
+            <span class="block h-px w-4 bg-current"></span>
+          </span>
+        </button>
+      </div>
+    </nav>
+  </Container>
+
+  <dialog
+    id="mobile-navigation"
+    data-mobile-menu
+    class="m-0 ml-auto h-dvh max-h-none w-[min(20rem,86vw)] max-w-none border-0 bg-white p-0 text-stone-950 shadow-2xl backdrop:bg-stone-950/45 backdrop:backdrop-blur-sm dark:bg-[#1a1d28] dark:text-stone-50"
+    aria-label="移动端导航"
+  >
+    <div class="flex min-h-full flex-col p-5 sm:p-7">
+      <div class="flex items-center justify-between gap-4">
+        <span class="font-display text-xl font-semibold">导航</span>
+        <button
+          type="button"
+          data-mobile-menu-close
+          class="header-control inline-flex size-10 items-center justify-center rounded-xl text-xl text-stone-700 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700 dark:text-stone-200 dark:focus-visible:outline-indigo-300"
+          aria-label="关闭导航菜单"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+
+      <div class="mt-10 flex flex-col gap-2">
+        {
+          NAVIGATION.map((item, index) => (
+            <a
+              href={item.href}
+              class:list={[
+                "flex items-center justify-between rounded-xl px-4 py-3 text-base font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700 dark:focus-visible:outline-indigo-300",
+                isActive(item.href)
+                  ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300"
+                  : "text-stone-700 hover:bg-stone-100 dark:text-stone-300 dark:hover:bg-white/5",
+              ]}
+              aria-current={isActive(item.href) ? "page" : undefined}
+            >
+              <span>{item.label}</span>
+              <span class="font-mono text-xs text-stone-400" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+            </a>
+          ))
+        }
+        <a
+          href="/search"
+          class:list={[
+            "flex items-center justify-between rounded-xl px-4 py-3 text-base font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700 dark:focus-visible:outline-indigo-300",
+            isActive("/search")
+              ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300"
+              : "text-stone-700 hover:bg-stone-100 dark:text-stone-300 dark:hover:bg-white/5",
+          ]}
+          aria-current={isActive("/search") ? "page" : undefined}
+        >
+          <span>Search</span>
+          <span class="font-mono text-xs text-stone-400" aria-hidden="true">⌕</span>
+        </a>
+      </div>
+
+      <p class="mt-auto pt-10 text-sm leading-6 text-stone-500 dark:text-stone-500">
+        把每一次学习，整理成可以重新抵达的路径喵~
+      </p>
+    </div>
+  </dialog>
+</header>
+
+<style>
+  .site-header {
+    border-color: var(--color-border);
+    background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+    box-shadow: 0 1px 0 rgb(20 24 38 / 0.02);
+  }
+
+  .main-nav-link::after {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0;
+    left: 0.75rem;
+    height: 2px;
+    border-radius: 999px 999px 0 0;
+    background: var(--accent);
+    content: "";
+    transform: scaleX(0);
+    transition: transform 260ms var(--ease-material);
+  }
+
+  .main-nav-link:hover::after,
+  .main-nav-link-active::after {
+    transform: scaleX(1);
+  }
+
+  :global(.header-control) {
+    border: 1px solid transparent;
+    background: var(--color-surface-elevated);
+    box-shadow: none;
+  }
+
+  :global(.header-control:hover) {
+    border-color: var(--color-border);
+    background: var(--color-surface-hover);
+    color: var(--accent);
+  }
+</style>
+
+<script>
+  const menu = document.querySelector<HTMLDialogElement>("[data-mobile-menu]");
+  const openButton = document.querySelector<HTMLButtonElement>("[data-mobile-menu-open]");
+  const closeButton = menu?.querySelector<HTMLButtonElement>("[data-mobile-menu-close]");
+  const menuLinks = menu?.querySelectorAll<HTMLAnchorElement>("a");
+
+  const closeMenu = () => {
+    if (menu?.open) {
+      menu.close();
+    }
+  };
+
+  openButton?.addEventListener("click", () => {
+    menu?.showModal();
+    openButton.setAttribute("aria-expanded", "true");
+    document.documentElement.classList.add("menu-open");
+  });
+
+  closeButton?.addEventListener("click", closeMenu);
+  menuLinks?.forEach((link) => link.addEventListener("click", closeMenu));
+
+  menu?.addEventListener("click", (event) => {
+    if (event.target === menu) {
+      closeMenu();
+    }
+  });
+
+  menu?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeMenu();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menu?.open) {
+      event.preventDefault();
+      closeMenu();
+    }
+  });
+
+  menu?.addEventListener("close", () => {
+    openButton?.setAttribute("aria-expanded", "false");
+    document.documentElement.classList.remove("menu-open");
+    openButton?.focus();
+  });
+</script>

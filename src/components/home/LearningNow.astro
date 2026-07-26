@@ -1,0 +1,60 @@
+---
+import { getNoteHref, getSubjectConfig, getTopicLabel } from "../../config/subjects";
+import type { NoteEntry } from "../../utils/notes";
+import Container from "../shared/Container.astro";
+
+interface Props {
+  notes: NoteEntry[];
+}
+
+const { notes } = Astro.props;
+---
+
+<section class="content-section" aria-labelledby="learning-now-heading">
+  <Container>
+    <div class="grid gap-8 lg:grid-cols-[18rem_minmax(0,1fr)]">
+      <div>
+        <p
+          class="section-kicker text-xs font-bold tracking-[0.2em] text-indigo-700 uppercase dark:text-indigo-300"
+        >
+          Currently Learning
+        </p>
+        <h2
+          id="learning-now-heading"
+          class="section-title mt-3 font-display text-3xl font-bold text-stone-950 dark:text-stone-50"
+        >
+          正在学习
+        </h2>
+        <p class="mt-4 text-sm leading-7 text-stone-500 dark:text-stone-400">
+          这些笔记仍在复习、补充或建立联系中喵~
+        </p>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {
+          notes.map((note, index) => (
+            <a
+              href={getNoteHref(note.id)}
+              class="material-card group rounded-2xl border border-stone-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-700 motion-reduce:transform-none motion-reduce:transition-none dark:border-stone-800 dark:bg-stone-900 dark:hover:border-indigo-800 dark:focus-visible:outline-indigo-300"
+            >
+              <div class="flex items-center justify-between gap-4">
+                <span class="font-mono text-xs text-stone-400">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span class="text-xs text-indigo-700 dark:text-indigo-300">
+                  {note.data.status === "reviewing" ? "复习中" : "学习中"}
+                </span>
+              </div>
+              <h3 class="mt-8 font-display text-xl font-bold text-stone-950 group-hover:text-indigo-800 dark:text-stone-50 dark:group-hover:text-indigo-200">
+                {note.data.title}
+              </h3>
+              <p class="mt-2 text-xs text-stone-400">
+                {getSubjectConfig(note.data.subject)?.label} · {getTopicLabel(note.data.topic)}
+              </p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </Container>
+</section>

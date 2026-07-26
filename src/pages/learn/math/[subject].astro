@@ -1,0 +1,21 @@
+---
+import LearnSubjectPage from "../../../components/learn/LearnSubjectPage.astro";
+import { getSubjectsForDomain, type SubjectId } from "../../../config/subjects";
+import { getNotesBySubject } from "../../../utils/notes";
+
+interface Props {
+  subjectId: SubjectId;
+}
+
+export function getStaticPaths() {
+  return getSubjectsForDomain("mathematics").map((subjectId) => ({
+    params: { subject: subjectId },
+    props: { subjectId },
+  }));
+}
+
+const { subjectId } = Astro.props;
+const notes = await getNotesBySubject(subjectId);
+---
+
+<LearnSubjectPage subjectId={subjectId} notes={notes} />

@@ -1,0 +1,55 @@
+---
+import { NAVIGATION } from "../../config/navigation";
+import { SITE } from "../../config/site";
+import Container from "./Container.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t py-10" data-pagefind-ignore>
+  <Container class="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <a
+        href="/"
+        class="font-display text-xl font-semibold text-stone-950 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-700 dark:text-stone-50 dark:focus-visible:outline-indigo-300"
+      >
+        {SITE.name}
+      </a>
+      <p class="mt-2 max-w-md text-sm leading-6 text-stone-500 dark:text-stone-500">
+        持续学习，认真整理，也给未来的自己留一条回来的路喵~
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4 sm:items-end">
+      <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="页脚导航">
+        {
+          NAVIGATION.map((item) => (
+            <a
+              href={item.href}
+              class="text-sm text-stone-600 transition hover:text-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-700 dark:text-stone-400 dark:hover:text-indigo-300 dark:focus-visible:outline-indigo-300"
+            >
+              {item.label}
+            </a>
+          ))
+        }
+        <a
+          href="/rss.xml"
+          class="text-sm text-stone-600 transition hover:text-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-700 dark:text-stone-400 dark:hover:text-indigo-300 dark:focus-visible:outline-indigo-300"
+        >
+          RSS
+        </a>
+      </nav>
+      <p class="text-xs text-stone-400 dark:text-stone-600">
+        © {year}
+        {SITE.name}
+      </p>
+    </div>
+  </Container>
+</footer>
+
+<style>
+  footer {
+    border-color: var(--color-border);
+    background: var(--color-bg);
+  }
+</style>

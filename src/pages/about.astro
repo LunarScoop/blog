@@ -1,0 +1,29 @@
+---
+import Container from "../components/shared/Container.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="About" description="关于这座个人知识花园喵~">
+  <section class="page-section">
+    <Container>
+      <article class="page-header">
+        <p
+          class="page-kicker text-xs font-bold tracking-[0.22em] text-indigo-700 uppercase dark:text-indigo-300"
+        >
+          About
+        </p>
+        <h1
+          class="page-title mt-5 font-display text-4xl font-semibold tracking-[-0.03em] text-stone-950 sm:text-6xl dark:text-stone-50"
+        >
+          关于这座知识花园
+        </h1>
+        <div
+          class="mt-8 space-y-5 text-base leading-8 text-stone-600 sm:text-lg dark:text-stone-400"
+        >
+          <p>这是一个以数学与计算机知识为核心，结合项目实践与学习思考的个人数字花园喵~</p>
+          <p>它不会按考试科目切割知识，也不会让有价值的笔记被时间线淹没喵~</p>
+        </div>
+      </article>
+    </Container>
+  </section>
+</BaseLayout>

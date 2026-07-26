@@ -1,0 +1,71 @@
+---
+import "katex/dist/katex.min.css";
+---
+
+<div class="markdown-content" data-markdown-content>
+  <slot />
+</div>
+
+<script>
+  type KnowledgeTheme = "light" | "dark";
+
+  const getTheme = (): KnowledgeTheme =>
+    document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+
+  const getDiagrams = () =>
+    Array.from(document.querySelectorAll<HTMLElement>("pre.mermaid[data-mermaid-diagram]"));
+
+  const resetDiagram = (diagram: HTMLElement) => {
+    const source = diagram.dataset.mermaidSource;
+
+    if (source) {
+      diagram.textContent = source;
+      diagram.removeAttribute("data-processed");
+      diagram.classList.remove("mermaid-error");
+    }
+  };
+
+  const renderDiagrams = async (force = false) => {
+    const diagrams = getDiagrams();
+
+    if (diagrams.length === 0) {
+      return;
+    }
+
+    diagrams.forEach((diagram) => {
+      diagram.dataset.mermaidSource ??= diagram.textContent ?? "";
+
+      if (force) {
+        resetDiagram(diagram);
+      }
+    });
+
+    const pendingDiagrams = diagrams.filter(
+      (diagram) => diagram.getAttribute("data-processed") !== "true",
+    );
+
+    if (pendingDiagrams.length === 0) {
+      return;
+    }
+
+    try {
+      const { default: mermaid } = await import("mermaid");
+      mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: "strict",
+        theme: getTheme() === "dark" ? "dark" : "neutral",
+        fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+      });
+      await mermaid.run({ nodes: pendingDiagrams });
+    } catch (error) {
+      pendingDiagrams.forEach((diagram) => diagram.classList.add("mermaid-error"));
+      console.error("Mermaid 图表渲染失败喵~", error);
+    }
+  };
+
+  void renderDiagrams();
+
+  window.addEventListener("knowledge-garden:theme-change", () => {
+    void renderDiagrams(true);
+  });
+</script>

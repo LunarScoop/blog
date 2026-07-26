@@ -1,0 +1,92 @@
+---
+import MarkdownContent from "../components/markdown/MarkdownContent.astro";
+import Container from "../components/shared/Container.astro";
+import { formatDate } from "../utils/format";
+import type { ThoughtEntry } from "../utils/thoughts";
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  thought: ThoughtEntry;
+}
+
+const { thought } = Astro.props;
+---
+
+<BaseLayout
+  title={thought.data.title}
+  description={thought.data.description}
+  type="article"
+  publishedTime={thought.data.published}
+  updatedTime={thought.data.updated}
+>
+  <Container class="py-10 sm:py-16">
+    <article class="material-surface mx-auto max-w-3xl overflow-hidden">
+      <header class="px-6 py-9 sm:px-12 sm:py-12">
+        <nav class="text-sm text-stone-500 dark:text-stone-400" aria-label="面包屑">
+          <a
+            href="/thoughts"
+            class="rounded-sm transition hover:text-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700 dark:hover:text-indigo-300 dark:focus-visible:outline-indigo-300"
+          >
+            Thoughts
+          </a>
+          <span class="mx-2" aria-hidden="true">/</span>
+          <span>{thought.data.title}</span>
+        </nav>
+
+        <p
+          class="page-kicker mt-8 text-xs font-bold tracking-[0.2em] text-indigo-700 uppercase dark:text-indigo-300"
+        >
+          Thought
+        </p>
+        <h1
+          class="page-title mt-4 font-display text-4xl font-bold tracking-[-0.035em] text-balance text-stone-950 sm:text-5xl dark:text-stone-50"
+        >
+          {thought.data.title}
+        </h1>
+        <p
+          class="page-description mt-5 text-base leading-8 text-stone-600 sm:text-lg dark:text-stone-300"
+        >
+          {thought.data.description}
+        </p>
+
+        <div
+          class="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-stone-500 dark:text-stone-400"
+        >
+          <time datetime={thought.data.published.toISOString()}>
+            发布于 {formatDate(thought.data.published)}
+          </time>
+          {
+            thought.data.updated && (
+              <time datetime={thought.data.updated.toISOString()}>
+                更新于 {formatDate(thought.data.updated)}
+              </time>
+            )
+          }
+          <ul class="flex flex-wrap gap-2" aria-label="标签">
+            {thought.data.tags.map((tag) => <li class="tag-chip px-2.5 py-1 text-xs">#{tag}</li>)}
+          </ul>
+        </div>
+      </header>
+
+      <div
+        class="border-t border-stone-200 px-6 py-9 sm:px-12 sm:py-12 dark:border-stone-800"
+        data-pagefind-body
+      >
+        <span data-pagefind-meta="type:Thought" hidden></span>
+        <span data-pagefind-meta={`title:${thought.data.title}`} hidden></span>
+        <p class="sr-only">{thought.data.description}</p>
+        <MarkdownContent>
+          <slot />
+        </MarkdownContent>
+      </div>
+    </article>
+
+    <a
+      href="/thoughts"
+      class="material-link mx-auto mt-8 flex min-h-11 max-w-3xl items-center gap-2 px-3 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700 dark:focus-visible:outline-indigo-300"
+    >
+      <span aria-hidden="true">←</span>
+      返回 Thoughts
+    </a>
+  </Container>
+</BaseLayout>
