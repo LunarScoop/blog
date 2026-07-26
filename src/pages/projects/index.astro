@@ -1,46 +1,59 @@
 ---
-import Container from "../../components/shared/Container.astro";
-import ProjectCard from "../../components/projects/ProjectCard.astro";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getProjects } from "../../utils/projects";
+import ArchiveCard from '../../components/ArchiveCard.astro';
+import HeroHeader from '../../components/HeroHeader.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { heroConfig, locale, siteTitle } from '../../config';
+import PageShell from '../../layouts/PageShell.astro';
+import { getProjects } from '../../lib/content/projects';
 
 const projects = await getProjects();
+const siteURL = Astro.site ?? Astro.url;
+const projectsHero = heroConfig.projects;
+const description = "Things I've built and explored.";
+const collectionSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'CollectionPage',
+	name: `Projects | ${siteTitle}`,
+	description,
+	url: new URL('/projects/', siteURL).toString(),
+	inLanguage: locale,
+	mainEntity: {
+		'@type': 'ItemList',
+		itemListElement: projects.map((project, index) => ({
+			'@type': 'ListItem',
+			position: index + 1,
+			name: project.data.title,
+			url: new URL(`/projects/${project.id}/`, siteURL).toString(),
+		})),
+	},
+};
 ---
 
-<BaseLayout title="Projects" description="个人项目实践与技术实现记录喵~">
-  <section class="page-section">
-    <Container>
-      <div class="page-header">
-        <p
-          class="page-kicker text-xs font-bold tracking-[0.22em] text-indigo-700 uppercase dark:text-indigo-300"
-        >
-          Projects
-        </p>
-        <h1
-          class="page-title mt-5 font-display text-4xl font-semibold tracking-[-0.03em] text-stone-950 sm:text-6xl dark:text-stone-50"
-        >
-          让知识在真实项目里接受检验喵~
-        </h1>
-        <p
-          class="page-description mt-6 text-base leading-8 text-stone-600 sm:text-lg dark:text-stone-400"
-        >
-          每个项目都记录目标、技术选择与实现进度，让理论知识落到可以运行和复盘的作品中喵~
-        </p>
-      </div>
+<PageShell
+	title={`Projects | ${siteTitle}`}
+	{description}
+	schema={collectionSchema}
+	transparentHeader={true}
+>
+	<HeroHeader
+		text={projectsHero.text}
+		subtitle={projectsHero.subtitle}
+		backgroundImage={projectsHero.backgroundImage}
+		compact={true}
+	/>
 
-      {
-        projects.length > 0 ? (
-          <div class="mt-12 grid gap-6 md:grid-cols-2">
-            {projects.map((project) => (
-              <ProjectCard project={project} />
-            ))}
-          </div>
-        ) : (
-          <p class="mt-12 rounded-2xl border border-dashed border-stone-300 p-8 text-stone-500 dark:border-stone-700 dark:text-stone-400">
-            项目正在整理中，稍后回来看看吧喵~
-          </p>
-        )
-      }
-    </Container>
-  </section>
-</BaseLayout>
+	<ArchiveCard variant="blog" number="01" title="Projects" intro={description} minHeight={true}>
+		{projects.length > 0 ? (
+			<div class="projects-list">
+				{projects.map((project) => <ProjectCard {project} />)}
+			</div>
+		) : (
+			<p class="empty-state">No public projects yet.</p>
+		)}
+	</ArchiveCard>
+</PageShell>
+
+<style>
+	.projects-list { display: grid; gap: 1em; }
+	.empty-state { margin: 2em 0; color: var(--color-text-secondary); text-align: center; }
+</style>

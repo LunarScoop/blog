@@ -1,8 +1,0 @@
----
-import LearnDomainPage from "../../../components/learn/LearnDomainPage.astro";
-import { getNotesByDomain } from "../../../utils/notes";
-
-const notes = await getNotesByDomain("computer-science");
----
-
-<LearnDomainPage domainId="computer-science" notes={notes} />

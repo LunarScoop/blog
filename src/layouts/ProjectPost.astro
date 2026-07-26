@@ -1,0 +1,163 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+import { heroConfig, locale, profileConfig, siteTitle } from '../config';
+import { PROJECT_STATUS_LABELS } from '../lib/content/projects';
+import BlogPost from './BlogPost.astro';
+
+interface Heading {
+	depth: number;
+	slug: string;
+	text: string;
+}
+
+interface Props {
+	project: CollectionEntry<'projects'>;
+	headings?: Heading[];
+	wordCount?: number;
+	readingTime?: number;
+	seoDescription?: string;
+	loadKatexStyles?: boolean;
+}
+
+const {
+	project,
+	headings = [],
+	wordCount,
+	readingTime,
+	seoDescription,
+	loadKatexStyles = false,
+} = Astro.props;
+const { title, description, status, technologies, github, demo, created, updated, cover } = project.data;
+const siteURL = Astro.site ?? Astro.url;
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+const displayImage = cover ?? heroConfig.postDefaultBackground;
+const displayImageSrc = typeof displayImage === 'string' ? displayImage : displayImage.src;
+const creatorName = profileConfig.name || siteTitle;
+const projectSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'SoftwareSourceCode',
+	'@id': `${canonicalURL}#project`,
+	name: title,
+	description: seoDescription || description,
+	url: canonicalURL,
+	mainEntityOfPage: canonicalURL,
+	dateCreated: created.toISOString(),
+	...(updated ? { dateModified: updated.toISOString() } : {}),
+	creativeWorkStatus: status,
+	programmingLanguage: technologies,
+	keywords: technologies.join(', '),
+	...(github ? { codeRepository: github } : {}),
+	...(github || demo ? { sameAs: [github, demo].filter(Boolean) } : {}),
+	image: [new URL(displayImageSrc, siteURL).toString()],
+	inLanguage: locale,
+	creator: {
+		'@type': 'Person',
+		name: creatorName,
+		url: new URL('/about/', siteURL).toString(),
+	},
+};
+---
+
+<BlogPost
+	{title}
+	{description}
+	pubDate={created}
+	updatedDate={updated}
+	heroImage={cover}
+	categories={['Projects']}
+	tags={technologies}
+	{headings}
+	{wordCount}
+	{readingTime}
+	{seoDescription}
+	{loadKatexStyles}
+	structuredData={projectSchema}
+	openGraphType="website"
+>
+	<Fragment slot="hero-meta">
+		<div class="project-hero-meta">
+			<span class="project-status">{PROJECT_STATUS_LABELS[status]}</span>
+			<span>Started <FormattedDate date={created} /></span>
+			{updated && <span>Updated <FormattedDate date={updated} /></span>}
+		</div>
+	</Fragment>
+	<Fragment slot="print-meta"><p>Project started <FormattedDate date={created} /></p></Fragment>
+
+	<div class="project-summary" aria-label="Project metadata">
+		<div>
+			<span class="project-summary-label">Status</span>
+			<strong>{PROJECT_STATUS_LABELS[status]}</strong>
+		</div>
+		<div class="project-summary-technologies">
+			<span class="project-summary-label">Technologies</span>
+			<ul>{technologies.map((technology) => <li>{technology}</li>)}</ul>
+		</div>
+		{(github || demo) && (
+			<div class="project-summary-links">
+				<span class="project-summary-label">Links</span>
+				<p>
+					{github && <a href={github} target="_blank" rel="noreferrer">GitHub ↗</a>}
+					{demo && <a href={demo} target="_blank" rel="noreferrer">Demo ↗</a>}
+				</p>
+			</div>
+		)}
+	</div>
+	<slot />
+</BlogPost>
+
+<style>
+	.project-hero-meta {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.8em;
+		flex-wrap: wrap;
+		margin-top: 1em;
+		color: white;
+		font-size: 0.9em;
+		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+	}
+
+	.project-status {
+		padding: 0.3em 0.75em;
+		border: 1px solid rgba(255, 255, 255, 0.55);
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.14);
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.project-summary {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		gap: 1em;
+		margin: 0 0 2em;
+		padding: 1.2em;
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		background: var(--color-surface-elevated);
+	}
+
+	.project-summary > div { min-width: 0; }
+	.project-summary-label {
+		display: block;
+		margin-bottom: 0.5em;
+		color: var(--color-text-tertiary);
+		font-size: 0.75em;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.project-summary strong { color: var(--color-text); }
+	.project-summary ul { display: flex; flex-wrap: wrap; gap: 0.4em; margin: 0; padding: 0; list-style: none; }
+	.project-summary li { padding: 0.2em 0.55em; border-radius: 5px; background: var(--color-tag-bg); color: var(--color-tag-text); font-size: 0.8em; }
+	.project-summary-links p { display: flex; gap: 0.8em; margin: 0; }
+	.project-summary-links a { color: var(--accent); font-weight: 600; text-decoration: none; }
+
+	@media (max-width: 720px) {
+		.project-summary { grid-template-columns: 1fr; }
+	}
+</style>

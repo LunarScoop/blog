@@ -1,0 +1,157 @@
+---
+import { Image } from 'astro:assets';
+import type { Project } from '../lib/content/projects';
+import { PROJECT_STATUS_LABELS } from '../lib/content/projects';
+
+interface Props {
+	project: Project;
+	compact?: boolean;
+}
+
+const { project, compact = false } = Astro.props;
+const { title, description, status, technologies, github, demo, cover } = project.data;
+const projectUrl = `/projects/${project.id}/`;
+---
+
+<article class:list={['project-card', { 'project-card-compact': compact, 'project-card-with-cover': cover }]}>
+	{cover && (
+		<a class="project-cover" href={projectUrl} aria-label={`查看项目：${title}`}>
+			<Image src={cover} alt="" widths={[480, 720]} sizes="(max-width: 720px) 100vw, 40vw" />
+		</a>
+	)}
+	<div class="project-card-body">
+		<div class="project-card-heading">
+			<span class:list={['project-status', `project-status-${status}`]}>{PROJECT_STATUS_LABELS[status]}</span>
+			<h3><a href={projectUrl}>{title}</a></h3>
+		</div>
+		<p>{description}</p>
+		{technologies.length > 0 && (
+			<ul class="project-technologies" aria-label="Technologies">
+				{technologies.map((technology) => <li>{technology}</li>)}
+			</ul>
+		)}
+		<div class="project-actions">
+			<a class="project-detail-link" href={projectUrl}>View project <span aria-hidden="true">→</span></a>
+			{github && <a href={github} target="_blank" rel="noreferrer">GitHub ↗</a>}
+			{demo && <a href={demo} target="_blank" rel="noreferrer">Demo ↗</a>}
+		</div>
+	</div>
+</article>
+
+<style>
+	.project-card {
+		display: grid;
+		gap: 1.25em;
+		padding: 1.4em;
+		background: var(--color-surface-elevated);
+		border: 1px solid var(--color-border-subtle);
+		border-radius: 14px;
+		box-shadow: var(--shadow-card);
+		transition: transform 0.25s cubic-bezier(0.05, 0.7, 0.1, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+	}
+
+	.project-card:hover {
+		transform: translateY(-3px);
+		box-shadow: var(--shadow-card-hover);
+		border-color: var(--color-border);
+	}
+
+	.project-card-with-cover {
+		grid-template-columns: minmax(180px, 0.42fr) minmax(0, 1fr);
+	}
+
+	.project-cover {
+		display: block;
+		min-height: 180px;
+		overflow: hidden;
+		border-radius: 10px;
+		background: var(--color-surface);
+	}
+
+	.project-cover :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1);
+	}
+
+	.project-card:hover .project-cover :global(img) { transform: scale(1.025); }
+
+	.project-card-body { min-width: 0; }
+
+	.project-card-heading {
+		display: flex;
+		align-items: center;
+		gap: 0.75em;
+		flex-wrap: wrap;
+		margin-bottom: 0.65em;
+	}
+
+	h3 { margin: 0; font-size: 1.3em; }
+	h3 a { color: var(--color-text); text-decoration: none; }
+	h3 a:hover { color: var(--accent); }
+
+	p {
+		margin: 0 0 1em;
+		color: var(--color-text-secondary);
+		line-height: 1.7;
+	}
+
+	.project-status {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.25em 0.65em;
+		border-radius: 999px;
+		background: var(--color-tag-bg);
+		color: var(--color-tag-text);
+		font-size: 0.75em;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.project-status-active { color: var(--accent); }
+
+	.project-technologies {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45em;
+		margin: 0 0 1em;
+		padding: 0;
+		list-style: none;
+	}
+
+	.project-technologies li {
+		padding: 0.25em 0.65em;
+		border-radius: 6px;
+		background: var(--color-tag-bg);
+		color: var(--color-tag-text);
+		font-size: 0.8em;
+	}
+
+	.project-actions {
+		display: flex;
+		align-items: center;
+		gap: 1em;
+		flex-wrap: wrap;
+	}
+
+	.project-actions a {
+		color: var(--color-text-secondary);
+		font-size: 0.88em;
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	.project-actions a:hover { color: var(--accent); }
+	.project-actions .project-detail-link { color: var(--accent); }
+
+	.project-card-compact { box-shadow: none; }
+
+	@media (max-width: 720px) {
+		.project-card,
+		.project-card-with-cover { grid-template-columns: 1fr; border-radius: 12px; }
+		.project-card { padding: 1.1em; }
+		.project-cover { min-height: 160px; }
+	}
+</style>

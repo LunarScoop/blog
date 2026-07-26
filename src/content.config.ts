@@ -1,108 +1,64 @@
-import { defineCollection } from "astro:content";
-import { glob } from "astro/loaders";
-import { z } from "astro/zod";
+import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
-const nonEmptyString = z.string().trim().min(1);
-const tagsSchema = z.array(nonEmptyString).default([]);
-const draftSchema = z.boolean().default(false);
-
-const noteCommonFields = {
-  title: nonEmptyString,
-  description: z.string().trim().default(""),
-  topic: z.string().trim().default(""),
-  type: z.enum(["knowledge", "problem", "mistake"]).default("knowledge"),
-  tags: tagsSchema,
-  difficulty: z.enum(["easy", "medium", "hard"]).optional(),
-  status: z.enum(["todo", "learning", "reviewing", "completed"]).default("learning"),
-  related: z.array(nonEmptyString).default([]),
-  created: z.coerce.date(),
-  updated: z.coerce.date().optional(),
-  draft: draftSchema,
-};
-
-const noteSchema = z
-  .discriminatedUnion("domain", [
-    z
-      .object({
-        ...noteCommonFields,
-        domain: z.literal("mathematics"),
-        subject: z.enum(["calculus", "linear-algebra", "probability"]),
-      })
-      .strict(),
-    z
-      .object({
-        ...noteCommonFields,
-        domain: z.literal("computer-science"),
-        subject: z.enum([
-          "data-structures",
-          "computer-organization",
-          "operating-systems",
-          "computer-networks",
-        ]),
-      })
-      .strict(),
-  ])
-  .refine(({ created, updated }) => !updated || updated >= created, {
-    message: "updated 不能早于 created",
-    path: ["updated"],
-  });
-
-const projectSchema = z
-  .object({
-    title: nonEmptyString,
-    description: nonEmptyString,
-    status: z.enum(["planning", "building", "completed", "archived"]),
-    technologies: z.array(nonEmptyString).min(1),
-    github: z.url().optional(),
-    demo: z.url().optional(),
-    featured: z.boolean().default(false),
-    created: z.coerce.date(),
-    updated: z.coerce.date().optional(),
-    draft: draftSchema,
-  })
-  .strict()
-  .refine(({ created, updated }) => !updated || updated >= created, {
-    message: "updated 不能早于 created",
-    path: ["updated"],
-  });
-
-const thoughtSchema = z
-  .object({
-    title: nonEmptyString,
-    description: nonEmptyString,
-    published: z.coerce.date(),
-    updated: z.coerce.date().optional(),
-    tags: tagsSchema,
-    draft: draftSchema,
-  })
-  .strict()
-  .refine(({ published, updated }) => !updated || updated >= published, {
-    message: "updated 不能早于 published",
-    path: ["updated"],
-  });
-
-const notes = defineCollection({
-  loader: glob({
-    pattern: "**/[^_]*.{md,mdx}",
-    base: "./src/content/notes",
-  }),
-  schema: noteSchema,
+const blog = defineCollection({
+	// Load Markdown and MDX files in the `src/content/blog/` directory.
+	loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
+	// Type-check frontmatter using a schema
+	// 兼容 Hexo 和 Astro 两种规范
+	schema: ({ image }) =>
+		z.object({
+			title: z.string(),
+			// Hexo 使用 date，Astro 使用 pubDate，两者都支持
+			date: z.coerce.date().optional(),
+			pubDate: z.coerce.date().optional(),
+			// description 在 Hexo 中是可选的
+			description: z.string().optional(),
+			updatedDate: z.coerce.date().optional(),
+			// Hexo 的 updated 字段
+			updated: z.coerce.date().optional(),
+			heroImage: image().optional(),
+			// Hexo 特有字段
+			categories: z.union([z.string(), z.array(z.string())]).optional(),
+			tags: z.union([z.string(), z.array(z.string())]).optional(),
+			// Hexo 其他常见字段
+			permalink: z.string().optional(),
+			comments: z.boolean().optional(),
+			layout: z.string().optional(),
+			excerpt: z.string().optional(),
+		}).transform((data) => ({
+			...data,
+			// 统一处理日期：优先使用 pubDate，否则使用 date
+			pubDate: data.pubDate ?? data.date ?? new Date(),
+			// 统一处理更新日期
+			updatedDate: data.updatedDate ?? data.updated,
+			// 确保 categories 和 tags 总是数组
+			categories: data.categories
+				? (Array.isArray(data.categories) ? data.categories : [data.categories])
+				: [],
+			tags: data.tags
+				? (Array.isArray(data.tags) ? data.tags : [data.tags])
+				: [],
+		})),
 });
 
 const projects = defineCollection({
-  loader: glob({
-    pattern: "**/[^_]*.{md,mdx}",
-    base: "./src/content/projects",
-  }),
-  schema: projectSchema,
+	loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
+	schema: ({ image }) =>
+		z.object({
+			title: z.string(),
+			description: z.string(),
+			status: z.enum(['active', 'completed', 'archived']),
+			technologies: z.array(z.string()),
+			github: z.url().optional(),
+			demo: z.url().optional(),
+			featured: z.boolean().default(false),
+			created: z.coerce.date(),
+			updated: z.coerce.date().optional(),
+			cover: image().optional(),
+			draft: z.boolean().default(false),
+		}),
 });
 
-const thoughts = defineCollection({
-  loader: glob({
-    pattern: "**/[^_]*.{md,mdx}",
-    base: "./src/content/thoughts",
-  }),
-  schema: thoughtSchema,
-});
-
-export const collections = { notes, projects, thoughts };
+export const collections = { blog, projects };

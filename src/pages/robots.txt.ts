@@ -1,19 +1,24 @@
-import type { APIRoute } from "astro";
+import { siteUrl } from '../config/site';
 
-export const GET: APIRoute = ({ site }) => {
-  const siteUrl = site ?? new URL("https://knowledge-garden.example");
-  const sitemapUrl = new URL("sitemap-index.xml", siteUrl);
-  const body = [
-    "User-agent: *",
-    "Allow: /",
-    "Disallow: /preview/",
+export const prerender = true;
+
+function buildRobotsTxt() {
+  const sitemapUrl = new URL('sitemap-index.xml', siteUrl).toString();
+
+  return [
+    'User-agent: *',
+    'Allow: /',
+    'Disallow: /search-index.json',
+    '',
     `Sitemap: ${sitemapUrl}`,
-    "",
-  ].join("\n");
+    '',
+  ].join('\n');
+}
 
-  return new Response(body, {
+export function GET() {
+  return new Response(buildRobotsTxt(), {
     headers: {
-      "Content-Type": "text/plain; charset=utf-8",
+      'Content-Type': 'text/plain; charset=utf-8',
     },
   });
-};
+}
