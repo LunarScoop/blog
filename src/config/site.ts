@@ -39,7 +39,7 @@ export const siteConfig: SiteConfig = {
   siteDescription: '一个记录数学、计算机、项目实践与学习思考的个人博客。',
   locale: 'zh-CN',
   headerGithubRepoUrl: '',
-  faviconIco: '/image/theme-showcase/portrait-image-demo.svg',
+  faviconIco: '/favicon.svg',
 };
 
 export const { siteUrl, siteTitle, siteTitleSuffix, siteDescription, locale, headerGithubRepoUrl, faviconIco } = siteConfig;

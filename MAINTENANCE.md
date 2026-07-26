@@ -66,6 +66,12 @@ About 页面个人资料统一在 `src/config/profile.ts` 中维护，当前名�
 
 About 头像使用从该 GitHub 账号同步到 `src/assets/github-avatar.png` 的本地副本，GitHub 头像变化后需要重新同步此文件喵~
 
+首页、Blog、Projects、Tags、About 与内容详情页的 Hero 文案统一维护在 `src/config/hero.ts` 中，并共用 `src/assets/hero-lunarscoop-alt.jpg` 作为默认背景喵~
+
+首页 Hero 当前主标题为 `Writing down what I learn along the way`，副标题为 `Learning as I go`，对应功能提交为 `255bc30` 喵~
+
+浏览器标签页图标使用 `public/favicon.svg`，由 `src/config/site.ts` 中的 `faviconIco` 统一引用喵~
+
 站点目前使用 `http://localhost:4321` 作为 canonical 基地址，正式部署前必须在 `src/config/site.ts` 中替换为真实公开域名喵~
 
 ## 依赖与运行
