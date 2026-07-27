@@ -2,7 +2,7 @@
 
 Thanks for contributing to `ulBo`.
 
-Use Node.js 22.12.0 or newer and npm 9.6.5 or newer. The repository includes an `.nvmrc` file.
+Use Node.js 24.15.0 or newer and pnpm 11.9.0. The repository includes `.node-version` and `.nvmrc` files.
 
 ## Workflow
 
@@ -11,9 +11,10 @@ Use Node.js 22.12.0 or newer and npm 9.6.5 or newer. The repository includes an 
 3. Run local checks before opening a PR:
 
 ```bash
-npm ci
-npm run check
-npm run build
+pnpm install --frozen-lockfile
+pnpm check
+pnpm test
+pnpm build
 ```
 
 4. Open a pull request with:

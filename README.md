@@ -126,9 +126,9 @@ npm run preview
 
 ### 1) 前置条件
 
-- Node.js 22.12.0 或更高版本
-- npm 9.6.5 或更高版本
-- 仓库提供 `.nvmrc`，可使用 `nvm use` 切换到项目约定版本
+- Node.js 24.15.0 或更高版本
+- pnpm 11.9.0
+- 仓库提供 `.node-version` 与 `.nvmrc`，可使用对应的 Node 版本管理器切换到项目约定版本
 
 ### 2) 从 GitHub Template 创建项目
 
@@ -229,7 +229,7 @@ npm run preview
 - 构建命令：`npm run build`
 - 部署命令：`npm run deploy`
 - 根目录：`/`
-- Node.js：`22.12.0`（同时由 `.nvmrc` 固定）
+- Node.js：`24.15.0`（同时由 `.node-version` 与 `.nvmrc` 固定）
 
 推送到生产分支后，Cloudflare 会自动构建并部署 `dist/`。如需手动部署，可在完成 Cloudflare 登录后运行：
 

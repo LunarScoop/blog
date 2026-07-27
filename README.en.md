@@ -145,9 +145,9 @@ npm run preview
 
 ### 1) Prerequisites
 
-- Node.js 22.12.0 or newer
-- npm 9.6.5 or newer
-- The repository includes `.nvmrc`; run `nvm use` to select the project version
+- Node.js 24.15.0 or newer
+- pnpm 11.9.0
+- The repository includes `.node-version` and `.nvmrc`; use the matching Node version manager to select the project version
 
 ### 2) Create your project from GitHub Template
 
@@ -248,7 +248,7 @@ Cloudflare Workers Static Assets is recommended. The repository includes `wrangl
 - Build command: `npm run build`
 - Deploy command: `npm run deploy`
 - Root directory: `/`
-- Node.js: `22.12.0` (also pinned by `.nvmrc`)
+- Node.js: `24.15.0` (also pinned by `.node-version` and `.nvmrc`)
 
 Cloudflare will build and deploy `dist/` automatically after pushes to the production branch. To deploy manually after authenticating with Cloudflare, run:
 
