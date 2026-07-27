@@ -12,13 +12,13 @@ const { transparent = true } = Astro.props;
 <header class:list={[{ transparent }]} transition:persist transition:name="header" transition:animate="none">
 	<div id="navigation-progress" aria-hidden="true"></div>
 	<nav>
-		<h2><a href="/">{siteTitle}</a></h2>
+		<h2><a href="/" data-astro-prefetch="load">{siteTitle}</a></h2>
 		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/projects">Projects</HeaderLink>
-			<HeaderLink href="/tags">Tags</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
+			<HeaderLink href="/" data-astro-prefetch="load">Home</HeaderLink>
+			<HeaderLink href="/blog" data-astro-prefetch="load">Blog</HeaderLink>
+			<HeaderLink href="/projects" data-astro-prefetch="viewport">Projects</HeaderLink>
+			<HeaderLink href="/tags" data-astro-prefetch="viewport">Tags</HeaderLink>
+			<HeaderLink href="/about" data-astro-prefetch="viewport">About</HeaderLink>
 			<div class="nav-indicator" id="nav-indicator"></div>
 		</div>
 		<div class="header-actions">
@@ -71,11 +71,11 @@ const { transparent = true } = Astro.props;
 	<div id="mobile-nav-overlay" class="mobile-nav-overlay" aria-hidden="true"></div>
 	<aside id="mobile-nav-drawer" class="mobile-nav-drawer" aria-hidden="true">
 		<nav class="mobile-nav-links" aria-label="移动端导航">
-			<a href="/" class="mobile-nav-link">Home</a>
-			<a href="/blog" class="mobile-nav-link">Blog</a>
-			<a href="/projects" class="mobile-nav-link">Projects</a>
-			<a href="/tags" class="mobile-nav-link">Tags</a>
-			<a href="/about" class="mobile-nav-link">About</a>
+			<a href="/" class="mobile-nav-link" data-astro-prefetch="load">Home</a>
+			<a href="/blog" class="mobile-nav-link" data-astro-prefetch="load">Blog</a>
+			<a href="/projects" class="mobile-nav-link" data-astro-prefetch="viewport">Projects</a>
+			<a href="/tags" class="mobile-nav-link" data-astro-prefetch="viewport">Tags</a>
+			<a href="/about" class="mobile-nav-link" data-astro-prefetch="viewport">About</a>
 		</nav>
 	</aside>
 </header>

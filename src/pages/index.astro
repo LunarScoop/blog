@@ -394,7 +394,7 @@ function formatDate(date: Date) {
                   />
                 ))}
               </div>
-              <a href="/blog" class="blog-link" style="margin-top: 1em;">查看全部文章 ⇗</a>
+              <a href="/blog" class="blog-link" style="margin-top: 1em;" data-astro-prefetch="load">查看全部文章 ⇗</a>
             </>
           ) : (
             <p class="empty-state">暂无文章</p>
@@ -407,7 +407,7 @@ function formatDate(date: Date) {
             <div class="featured-projects-grid">
               {featuredProjects.map((project) => <ProjectCard {project} compact={true} />)}
             </div>
-            <a href="/projects" class="blog-link" style="margin-top: 1.5em;">View all projects ⇗</a>
+            <a href="/projects" class="blog-link" style="margin-top: 1.5em;" data-astro-prefetch="viewport">View all projects ⇗</a>
           </div>
         )}
       </div>
