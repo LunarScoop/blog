@@ -1,3 +1,4 @@
+import { initArticleCalendars } from '../article-calendar';
 import { setupParallax } from './parallax';
 
 function setupScrollReveal() {
@@ -46,6 +47,7 @@ function setupScrollReveal() {
 }
 
 export function initBlogListPage() {
+	initArticleCalendars();
 	setupScrollReveal();
 	setupParallax({ desktopRise: 180, coarsePointerRise: 72 });
 }

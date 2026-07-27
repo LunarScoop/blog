@@ -62,6 +62,26 @@ Projects 目录当前为空并使用 `.gitkeep` 保留，后续项目可按上�
 
 RSS 继续只读取 Blog，Projects 不进入 RSS 喵~
 
+## 文章日历维护
+
+Blog 归档首页 `/blog` 会在文章列表之前显示年度文章日历，分页页不会重复显示日历喵~
+
+日历在构建时合并公开 Blog 与非草稿 Projects，Blog 使用规范化后的 `pubDate` 字段，Projects 使用 `created` 字段，不需要维护额外 JSON 数据喵~
+
+Blog 的 `pubDate` 与兼容字段 `date` 至少需要填写一个，缺少发布日期的内容会在 Content Collections 校验阶段报错喵~
+
+日期分组统一使用 `src/config/site.ts` 中的 `siteTimeZone`，当前值为 `Asia/Shanghai`，更换站点主要时区时应同步修改此配置喵~
+
+日历数据聚合与日期计算位于 `src/lib/content/article-calendar.ts`，Astro 静态界面位于 `src/components/ArticleCalendar.astro`，轻量交互位于 `src/scripts/article-calendar.ts` 喵~
+
+发布数量等级固定为零篇、1 篇、2 篇、3 篇、4 篇及以上五档，颜色从 `--accent`、主题表面色与边框变量计算，因此浅色和深色主题不需要分别维护颜色喵~
+
+年份选择器只展示实际存在内容的年份与当前年份，选择有内容的日期后会在日历下方按 Blog 分类或 Projects 分组显示可点击条目喵~
+
+手机端保留 16 像素日期格并通过横向滚动浏览全年，维护样式时不要为了适配窄屏继续压缩日期格喵~
+
+日期、闰年、星期布局和数量等级的回归测试位于 `src/lib/content/article-calendar.test.ts` 喵~
+
 About 页面个人资料统一在 `src/config/profile.ts` 中维护，当前名称为 `LunarScoop`、身份标题为 `Learner`，并显示城市 `Guangzhou`、邮箱 `1493195049@qq.com` 与 GitHub `https://github.com/LunarScoop`，未配置 X 和个人网站喵~
 
 About 头像使用从该 GitHub 账号同步到 `src/assets/github-avatar.png` 的本地副本，GitHub 头像变化后需要重新同步此文件喵~

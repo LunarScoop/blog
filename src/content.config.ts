@@ -27,10 +27,15 @@ const blog = defineCollection({
 			comments: z.boolean().optional(),
 			layout: z.string().optional(),
 			excerpt: z.string().optional(),
-		}).transform((data) => ({
+		})
+		.refine((data) => data.pubDate !== undefined || data.date !== undefined, {
+			message: 'Blog posts require either `pubDate` or `date`.',
+			path: ['pubDate'],
+		})
+		.transform((data) => ({
 			...data,
-			// 统一处理日期：优先使用 pubDate，否则使用 date
-			pubDate: data.pubDate ?? data.date ?? new Date(),
+			// 上面的 refine 已确保两者至少存在一个，优先使用 pubDate
+			pubDate: data.pubDate ?? data.date!,
 			// 统一处理更新日期
 			updatedDate: data.updatedDate ?? data.updated,
 			// 确保 categories 和 tags 总是数组
