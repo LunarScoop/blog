@@ -44,7 +44,7 @@ export const siteConfig: SiteConfig = {
   locale: 'zh-CN',
   siteTimeZone: 'Asia/Shanghai',
   headerGithubRepoUrl: 'https://github.com/LunarScoop',
-  faviconIco: '/favicon.svg',
+  faviconIco: '/favicon.svg?v=2',
 };
 
 export const {

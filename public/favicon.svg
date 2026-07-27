@@ -1,31 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
   <title id="title">LunarScoop moon icon</title>
   <defs>
-    <linearGradient id="background" x1="10" y1="6" x2="54" y2="58" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#102B59"/>
-      <stop offset="1" stop-color="#06152F"/>
-    </linearGradient>
-    <linearGradient id="moon" x1="20" y1="18" x2="43" y2="46" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FFFFFF"/>
-      <stop offset="1" stop-color="#B9E4FF"/>
+    <linearGradient id="moon" x1="14" y1="13" x2="42" y2="51" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD95A"/>
+      <stop offset="1" stop-color="#FFB800"/>
     </linearGradient>
     <mask id="crescent">
       <rect width="64" height="64" fill="#000"/>
-      <circle cx="30" cy="32" r="17" fill="#fff"/>
-      <circle cx="38" cy="25" r="16" fill="#000"/>
+      <circle cx="28" cy="32" r="20" fill="#fff"/>
+      <circle cx="37" cy="24" r="17" fill="#000"/>
     </mask>
   </defs>
-  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#background)"/>
-  <rect
-    x="2.5"
-    y="2.5"
-    width="59"
-    height="59"
-    rx="13.5"
+  <circle cx="28" cy="32" r="20" fill="url(#moon)" mask="url(#crescent)"/>
+  <path
+    d="M8 39C16 50 44 52 56 36"
     fill="none"
-    stroke="#8CCFFF"
-    stroke-opacity=".18"
+    stroke="#2ECFD0"
+    stroke-width="4.5"
+    stroke-linecap="round"
   />
-  <circle cx="30" cy="32" r="17" fill="url(#moon)" mask="url(#crescent)"/>
-  <circle cx="44.5" cy="42.5" r="2.25" fill="#F4A7C4" opacity=".78"/>
+  <path d="M45 10L47 16L53 18L47 20L45 26L43 20L37 18L43 16Z" fill="#FFC21C"/>
 </svg>
