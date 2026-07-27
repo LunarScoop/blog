@@ -92,7 +92,7 @@ const {
 				__globalPageEnhancementsHandler?: () => void;
 			};
 
-			const handlePageLoad = () => runCurrentPageEnhancements();
+			const handlePageLoad = () => void runCurrentPageEnhancements();
 
 			if (runtimeWindow.__globalPageEnhancementsHandler) {
 				document.removeEventListener('astro:page-load', runtimeWindow.__globalPageEnhancementsHandler);

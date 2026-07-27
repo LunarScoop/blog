@@ -1,33 +1,31 @@
-import { initAboutPage } from './about.client';
-import { initBlogListPage } from './blog-list.client';
-import { initHomePage } from './home.client';
-import { initTagDetailPage } from './tag-detail.client';
-import { initTagsIndexPage } from './tags-index.client';
 import { cleanupParallax } from './parallax';
 
 export type PageEnhancementId = 'home' | 'about' | 'blog-list' | 'tags-index' | 'tag-detail';
 type PageEnhancementHandler = () => void;
+type PageEnhancementLoader = () => Promise<PageEnhancementHandler>;
 
-const handlers: Record<PageEnhancementId, PageEnhancementHandler> = {
-	home: initHomePage,
-	about: initAboutPage,
-	'blog-list': initBlogListPage,
-	'tags-index': initTagsIndexPage,
-	'tag-detail': initTagDetailPage,
+const loaders: Record<PageEnhancementId, PageEnhancementLoader> = {
+	home: () => import('./home.client').then(({ initHomePage }) => initHomePage),
+	about: () => import('./about.client').then(({ initAboutPage }) => initAboutPage),
+	'blog-list': () => import('./blog-list.client').then(({ initBlogListPage }) => initBlogListPage),
+	'tags-index': () => import('./tags-index.client').then(({ initTagsIndexPage }) => initTagsIndexPage),
+	'tag-detail': () => import('./tag-detail.client').then(({ initTagDetailPage }) => initTagDetailPage),
 };
 
 function getCurrentPageId(): PageEnhancementId | undefined {
 	const pageId = document.body.dataset.pageId;
 	if (!pageId) return undefined;
-	if (pageId in handlers) {
+	if (pageId in loaders) {
 		return pageId as PageEnhancementId;
 	}
 	return undefined;
 }
 
-export function runCurrentPageEnhancements() {
+export async function runCurrentPageEnhancements() {
 	cleanupParallax();
 	const pageId = getCurrentPageId();
 	if (!pageId) return;
-	handlers[pageId]();
+	const handler = await loaders[pageId]();
+	if (getCurrentPageId() !== pageId) return;
+	handler();
 }

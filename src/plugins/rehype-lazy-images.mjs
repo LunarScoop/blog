@@ -52,11 +52,14 @@ export function rehypeLazyImages() {
 			if (node.tagName === 'img') images.push(node);
 		});
 
-		await Promise.all(images.map(async (node, index) => {
+		await Promise.all(images.map(async (node) => {
 			node.properties ||= {};
-			node.properties.loading = index === 0 ? 'eager' : 'lazy';
-			node.properties.decoding = 'async';
-			if (index === 0) node.properties.fetchPriority = 'high';
+			// Article layouts already render a dedicated eager hero image. Keep Markdown
+			// images off the critical path, including Astro's auto-prioritized first image.
+			node.properties.loading = 'lazy';
+			node.properties.decoding ??= 'async';
+			delete node.properties.fetchPriority;
+			delete node.properties.fetchpriority;
 
 			if (node.properties.width && node.properties.height) return;
 			const imagePath = getLocalImagePath(node.properties.src);

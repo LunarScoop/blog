@@ -1,6 +1,6 @@
 import { reduceSearchState, type SearchState } from '../../lib/search/types';
 import { SearchDialog } from './dialog';
-import { SearchEngine } from './engine';
+import type { SearchEngine } from './engine';
 import { SearchIndexRepository } from './repository';
 import { SearchView } from './view';
 
@@ -105,7 +105,10 @@ export class SearchController {
 		this.state = reduceSearchState(this.state, { type: 'load-start', query });
 		this.render();
 		try {
-			const documents = await this.repository.load({ retry });
+			const [documents, { SearchEngine }] = await Promise.all([
+				this.repository.load({ retry }),
+				import('./engine'),
+			]);
 			if (this.destroyed) return;
 			this.documentCount = documents.length;
 			this.engine = new SearchEngine(documents);
