@@ -38,7 +38,7 @@ export const siteConfig: SiteConfig = {
   siteTitleSuffix: '个人博客',
   siteDescription: '一个记录数学、计算机、项目实践与学习思考的个人博客。',
   locale: 'zh-CN',
-  headerGithubRepoUrl: '',
+  headerGithubRepoUrl: 'https://github.com/LunarScoop',
   faviconIco: '/favicon.svg',
 };
 

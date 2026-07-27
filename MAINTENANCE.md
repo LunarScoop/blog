@@ -72,6 +72,8 @@ About 头像使用从该 GitHub 账号同步到 `src/assets/github-avatar.png` �
 
 浏览器标签页图标使用 `public/favicon.svg`，由 `src/config/site.ts` 中的 `faviconIco` 统一引用喵~
 
+桌面端 Header 右上角的 GitHub 图标链接由 `src/config/site.ts` 中的 `headerGithubRepoUrl` 维护，当前指向 `https://github.com/LunarScoop` 喵~
+
 站点目前使用 `http://localhost:4321` 作为 canonical 基地址，正式部署前必须在 `src/config/site.ts` 中替换为真实公开域名喵~
 
 ## 依赖与运行
