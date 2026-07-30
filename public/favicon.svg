@@ -1,23 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
-  <title id="title">LunarScoop moon icon</title>
-  <defs>
-    <linearGradient id="moon" x1="14" y1="13" x2="42" y2="51" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FFD95A"/>
-      <stop offset="1" stop-color="#FFB800"/>
-    </linearGradient>
-    <mask id="crescent">
-      <rect width="64" height="64" fill="#000"/>
-      <circle cx="28" cy="32" r="20" fill="#fff"/>
-      <circle cx="37" cy="24" r="17" fill="#000"/>
-    </mask>
-  </defs>
-  <circle cx="28" cy="32" r="20" fill="url(#moon)" mask="url(#crescent)"/>
+  <title id="title">LunarScoop moon stand icon</title>
+  <circle cx="32" cy="32" r="29" fill="none" stroke="#D9DADC" stroke-width="1.25"/>
   <path
-    d="M8 39C16 50 44 52 56 36"
+    d="M16 37C24.5 42.5 39.5 42.5 48 37"
     fill="none"
-    stroke="#2ECFD0"
-    stroke-width="4.5"
+    stroke="#D6D7D8"
+    stroke-width="1.5"
     stroke-linecap="round"
   />
-  <path d="M45 10L47 16L53 18L47 20L45 26L43 20L37 18L43 16Z" fill="#FFC21C"/>
+  <path
+    d="M12 38C23 45.5 41 45.5 52 38"
+    fill="none"
+    stroke="#151A1F"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+  <circle cx="32" cy="25" r="14" fill="#F3F3F1" stroke="#151A1F" stroke-width="2.75"/>
+  <path d="M22.5 16.5A13 13 0 0 1 41.5 16" fill="none" stroke="#E0E0DE" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="27" cy="22" r="2.1" fill="none" stroke="#AEB1B5" stroke-width="1.35"/>
+  <circle cx="37" cy="23" r="1.65" fill="none" stroke="#AEB1B5" stroke-width="1.35"/>
+  <circle cx="31" cy="29.5" r="1.9" fill="none" stroke="#B9BCBF" stroke-width="1.35"/>
+  <circle cx="19.5" cy="14.5" r="1.25" fill="#D5A749"/>
+  <circle cx="44.5" cy="12.5" r="0.8" fill="#D8B96F"/>
+  <circle cx="17" cy="31.5" r="0.8" fill="#D8B96F"/>
+  <path d="M32 39V53" fill="none" stroke="#151A1F" stroke-width="3" stroke-linecap="round"/>
+  <path d="M24 54H40" fill="none" stroke="#151A1F" stroke-width="3" stroke-linecap="round"/>
 </svg>
