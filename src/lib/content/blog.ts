@@ -7,7 +7,7 @@ export function sortPostsByDateDesc(posts: BlogPost[]): BlogPost[] {
 }
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
-	const posts = await getCollection('blog');
+	const posts = await getCollection('blog', ({ data }) => !data.draft);
 	return sortPostsByDateDesc(posts);
 }
 

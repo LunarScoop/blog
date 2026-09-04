@@ -10,6 +10,7 @@ const blog = defineCollection({
 	schema: ({ image }) =>
 		z.object({
 			title: z.string(),
+			draft: z.boolean().optional(),
 			// Hexo 使用 date，Astro 使用 pubDate，两者都支持
 			date: z.coerce.date().optional(),
 			pubDate: z.coerce.date().optional(),

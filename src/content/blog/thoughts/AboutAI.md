@@ -2,6 +2,7 @@
 title: "关于我对 AI 发展的一些看法"
 description: "从对 AI 的焦虑，到逐渐学会与 AI 协作。记录我在学习计算机过程中，对 AI、能力与学习这件事的一些思考。"
 pubDate: 2026-07-27
+draft: true
 categories:
   - Computer Science
 tags:
