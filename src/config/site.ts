@@ -37,7 +37,7 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  siteUrl: 'http://localhost:4321',
+  siteUrl: 'https://lunarscoop.cn',
   siteTitle: 'LunarScoop',
   siteTitleSuffix: '个人博客',
   siteDescription: '一个记录数学、计算机、项目实践与学习思考的个人博客。',
