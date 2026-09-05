@@ -2,6 +2,7 @@
 import { type CollectionEntry, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 import { getBlogPosts } from '../../lib/content/blog';
+import { getReadingStats } from '../../lib/content/reading-stats';
 import { extractSeoDescription } from '../../lib/content/text';
 
 export async function getStaticPaths() {
@@ -22,9 +23,7 @@ const hasMath = /\$\$[\s\S]*?\$\$|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\]|\$[^$\n]+\$|
 	body,
 );
 
-// 计算字数和阅读时间
-const wordCount = body ? body.replace(/[#*`~>\[\]\(\)\-\!\s]/g, '').length : 0;
-const readingTime = Math.ceil(wordCount / 400);
+const { wordCount, readingTime } = getReadingStats(body);
 ---
 
 <BlogPost

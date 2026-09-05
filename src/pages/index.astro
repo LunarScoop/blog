@@ -8,12 +8,13 @@ import SectionHeader from '../components/SectionHeader.astro';
 import { heroConfig, locale, siteDescription, siteTitle } from '../config';
 import { getBlogPosts } from '../lib/content/blog';
 import { getFeaturedProjects } from '../lib/content/projects';
+import { getReadingStats } from '../lib/content/reading-stats';
 
 const posts = await getBlogPosts();
 const featuredProjects = await getFeaturedProjects(4);
 const siteURL = Astro.site ?? Astro.url;
 const postCount = posts.length;
-const wordCount = posts.reduce((acc, post) => acc + (post.body ? post.body.length : 0), 0);
+const wordCount = posts.reduce((acc, post) => acc + getReadingStats(post.body ?? '').wordCount, 0);
 const tagCount = new Set(posts.flatMap((post) => post.data.tags || [])).size;
 const sortedAscPosts = [...posts].sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
 const startDate = postCount > 0 ? sortedAscPosts[0].data.pubDate : null;

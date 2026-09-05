@@ -1,7 +1,7 @@
 ---
 title: "EEGAgent：基于大语言模型的自动化 EEG 分析统一框架"
 description: "对 AAAI 2026 论文 EEGAgent 的阅读与分析：利用大语言模型进行任务规划与工具调度，将原本彼此孤立的 EEG 单任务模型组织为统一的多任务自动分析框架。"
-pubDate: 2026-09-05
+pubDate: 2026-08-31
 tags:
   - EEG
   - LLM Agent
@@ -64,32 +64,22 @@ heroImage: "../../assets/blog/eegagent-framework.png"
 
 因此，EEGAgent 的整体逻辑并不是一个简单的
 
-```text
-EEG -> Model -> Prediction
+```mermaid
+flowchart LR
+    eeg["EEG"] --> model["Model"] --> prediction["Prediction"]
 ```
 
 而更接近：
 
-```text
-Question + EEG Environment + Knowledge
-                    |
-                    v
-               LLM Agent
-                    |
-             Task Planning
-                    |
-                    v
-               EEG Tools
-                    |
-              Tool Results
-                    |
-                    v
-             Context Update
-                    |
-              Further Reasoning
-                    |
-                    v
-          Analysis / Detection / Report
+```mermaid
+flowchart TD
+    inputs["Question + EEG Environment + Knowledge"] --> agent["LLM Agent"]
+    agent --> planning["Task Planning"]
+    planning --> tools["EEG Tools"]
+    tools --> results["Tool Results"]
+    results --> context["Context Update"]
+    context --> reasoning["Further Reasoning"]
+    reasoning --> output["Analysis / Detection / Report"]
 ```
 
 其中最关键的变化，是将 **EEG 模型从最终系统本身转化为可被调度的工具**。
@@ -104,11 +94,12 @@ Question + EEG Environment + Knowledge
 
 传统自动 EEG 分析通常针对一个确定任务构建模型，例如：
 
-```text
-EEG -> Abnormal / Normal
-EEG -> Seizure / Non-seizure
-EEG -> Sleep Stage
-EEG -> Depression / Healthy Control
+```mermaid
+flowchart LR
+    eeg1["EEG"] --> abnormal["Abnormal / Normal"]
+    eeg2["EEG"] --> seizure["Seizure / Non-seizure"]
+    eeg3["EEG"] --> sleep["Sleep Stage"]
+    eeg4["EEG"] --> depression["Depression / Healthy Control"]
 ```
 
 这些模型可以分别完成各自的预测任务，但它们通常缺少对更大分析上下文的理解，也无法自行决定：
@@ -171,18 +162,13 @@ EEG 信号具有明显的非平稳性，而临床相关事件可能只存在于�
 
 EEGAgent 因此采用由粗到细的多粒度策略：
 
-```text
-Long / Coarse Window
-        |
-  Suspicious Event?
-     /       \
-   No         Yes
-   |           |
-Continue    Fine Window
-               |
-          Channel-level
-               |
-     Spatiotemporal Localization
+```mermaid
+flowchart TD
+    coarse["Long / Coarse Window"] --> suspicious{"Suspicious Event?"}
+    suspicious -->|No| next["Continue"]
+    suspicious -->|Yes| fine["Fine Window"]
+    fine --> channels["Channel-level"]
+    channels --> location["Spatiotemporal Localization"]
 ```
 
 论文在事件检测过程中主要使用 **10 秒与 1 秒两个时间尺度**：先通过较粗的时间窗口进行筛查，当发现可能存在目标事件时，再进入 1 秒级别的精细分析，并进一步结合单通道与多通道信息完成空间定位。
@@ -197,13 +183,13 @@ EEGAgent 参考 ACNS EEG reporting guideline，将报告划分为患者信息、
 
 因此，系统试图打通：
 
-```text
-Raw EEG
-   -> Signal Analysis
-   -> Event Detection
-   -> Spatiotemporal Localization
-   -> Contextual Reasoning
-   -> Structured EEG Report
+```mermaid
+flowchart TD
+    eeg["Raw EEG"] --> analysis["Signal Analysis"]
+    analysis --> detection["Event Detection"]
+    detection --> location["Spatiotemporal Localization"]
+    location --> reasoning["Contextual Reasoning"]
+    reasoning --> report["Structured EEG Report"]
 ```
 
 从系统设计上看，这比单独输出一个分类标签更接近真实 EEG 工作流。
@@ -296,12 +282,14 @@ EEGAgent 内部维护 EEG-related knowledge library。
 
 完成基本信息感知与知识检索之后，Qwen 综合：
 
-```text
-User Question
-+ EEG Environment
-+ Retrieved EEG Knowledge
-+ Previous Tool Results
-+ Interaction Context
+```mermaid
+flowchart LR
+    question["User Question"] --> qwen["Qwen"]
+    environment["EEG Environment"] --> qwen
+    knowledge["Retrieved EEG Knowledge"] --> qwen
+    results["Previous Tool Results"] --> qwen
+    context["Interaction Context"] --> qwen
+    qwen --> selection["Tool Selection"]
 ```
 
 决定下一步应该调用哪些工具。
@@ -331,10 +319,11 @@ User Question
 
 首先进行较粗时间粒度的扫描；当某个时间段被认为可能存在目标事件后，系统切换到更细粒度的 1 秒分析，并进一步检查相关通道，从而回答三个问题：
 
-```text
-What?  -> Event Type
-When?  -> Start / End Time
-Where? -> Channel / Brain Region
+```mermaid
+flowchart LR
+    what["What?"] --> event["Event Type"]
+    when["When?"] --> time["Start / End Time"]
+    where["Where?"] --> location["Channel / Brain Region"]
 ```
 
 这种设计使事件检测从简单的 recording-level classification 转化为 **spatiotemporal event localization**。
@@ -347,40 +336,24 @@ EEGAgent 会保存此前对话与工具调用形成的上下文，因此用户�
 
 整个流程可以概括为：
 
-```text
-Question
-   |
-   v
-Environment Perception
-   |
-   v
-Knowledge Retrieval
-   |
-   v
-LLM Planning
-   |
-   v
-Tool Selection & Execution
-   |
-   v
-Result -> Context
-   |         |
-   |         v
-   +---- Further Reasoning
-             |
-        More Tools ?
-          /     \
-        Yes      No
-         |        |
-         +--------+
-             |
-             v
-      Analysis / Report
+```mermaid
+flowchart TD
+    question["Question"] --> perception["Environment Perception"]
+    perception --> knowledge["Knowledge Retrieval"]
+    knowledge --> planning["LLM Planning"]
+    planning --> tools["Tool Selection & Execution"]
+    tools --> result["Result"]
+    result --> context["Context"]
+    result --> reasoning["Further Reasoning"]
+    context --> reasoning
+    reasoning --> more{"More Tools?"}
+    more -->|Yes| tools
+    more -->|No| output["Analysis / Report"]
 ```
 
 ---
 
-## 一个典型案例：分析第 5 到第 6 分钟的 EEG
+## 举一个例子
 
 论文在 TUAB 上给出了一个很能体现 Agent 特性的案例。
 
@@ -486,12 +459,19 @@ EEGAgent 提供的是另一条路线。
 
 因此可以将两种路线抽象为：
 
-```text
-Route A:
-One General EEG Model -> Multiple Tasks
-
-Route B:
-One General Agent + Multiple Specialized EEG Tools -> Multiple Tasks
+```mermaid
+flowchart TB
+    subgraph routeA["Route A"]
+        direction LR
+        model["One General EEG Model"] --> tasksA["Multiple Tasks"]
+    end
+    subgraph routeB["Route B"]
+        direction LR
+        agent["One General Agent"] --> combined["+"]
+        tools["Multiple Specialized EEG Tools"] --> combined
+        combined --> tasksB["Multiple Tasks"]
+    end
+    routeA ~~~ routeB
 ```
 
 EEGAgent 属于第二种路线。
@@ -533,12 +513,13 @@ TUEV 实验中，不同规模 Qwen3 在相同框架下产生了明显不同的 H
 
 而在 Agent 框架下，可以进一步写成：
 
-```text
-System Performance
-~= Tool Quality
- x Planning Quality
- x Context Quality
- x Knowledge Quality
+```mermaid
+flowchart LR
+    tools["Tool Quality"] --> combination["×"]
+    planning["Planning Quality"] --> combination
+    context["Context Quality"] --> combination
+    knowledge["Knowledge Quality"] --> combination
+    combination -->|≈| performance["System Performance"]
 ```
 
 这里并不是严格的数学关系，而是一种系统层面的理解：任何一个环节出现明显误差，都可能影响最终结果。
@@ -593,21 +574,14 @@ LLM 可以帮助系统决定何时调用 seizure detector，也可以根据其�
 
 它更值得关注的地方在于，将 EEG 自动分析重新组织为：
 
-```text
-EEG Data
-   +
-Specialized EEG Models
-   +
-Signal-processing Tools
-   +
-Domain Knowledge
-   +
-LLM Planner
-   +
-Interaction Context
-   |
-   v
-Unified EEG Analysis Agent
+```mermaid
+flowchart LR
+    eeg["EEG Data"] --> agent["Unified EEG Analysis Agent"]
+    models["Specialized EEG Models"] --> agent
+    tools["Signal-processing Tools"] --> agent
+    knowledge["Domain Knowledge"] --> agent
+    planner["LLM Planner"] --> agent
+    context["Interaction Context"] --> agent
 ```
 
 在这种体系下，未来 EEG AI 的研究对象不再只有单个模型，还可能包括：

@@ -2,6 +2,7 @@
 import { type CollectionEntry, render } from 'astro:content';
 import ProjectPost from '../../layouts/ProjectPost.astro';
 import { getProjects } from '../../lib/content/projects';
+import { getReadingStats } from '../../lib/content/reading-stats';
 import { extractSeoDescription } from '../../lib/content/text';
 
 export async function getStaticPaths() {
@@ -22,8 +23,7 @@ const seoDescription = (
 ).trim();
 const body = project.body ?? '';
 const hasMath = /\$\$[\s\S]*?\$\$|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\]|\$[^$\n]+\$|\\begin\{[a-zA-Z*]+\}/.test(body);
-const wordCount = body.replace(/[#*`~>\[\]\(\)\-\!\s]/g, '').length;
-const readingTime = Math.ceil(wordCount / 400);
+const { wordCount, readingTime } = getReadingStats(body);
 ---
 
 <ProjectPost
