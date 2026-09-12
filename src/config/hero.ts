@@ -1,4 +1,4 @@
-import defaultBackground from '../assets/hero-lunarscoop-alt.jpg';
+import defaultBackground from '../assets/hero-lunarscoop-enhanced.webp';
 import type { ImageMetadata } from 'astro';
 
 export type HeroBackground = string | ImageMetadata;

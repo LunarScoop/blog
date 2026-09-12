@@ -20,6 +20,16 @@ const {
     interactive = false
 } = Astro.props;
 const isOptimizableImage = typeof backgroundImage !== 'string';
+// Include the source's full resolution without manufacturing larger images.
+const sourceWidth = isOptimizableImage ? Math.min(backgroundImage.width, 3840) : 0;
+const imageWidths = isOptimizableImage
+    ? [...new Set([640, 960, 1280, 1440, 1920, 2560, 3840]
+        .filter((width) => width < sourceWidth).concat(sourceWidth))]
+    : [];
+// With object-fit: cover, portrait screens scale the landscape image by height.
+const imageSizes = isOptimizableImage
+    ? `max(100vw, ${Math.ceil(backgroundImage.width / backgroundImage.height * 100)}dvh)`
+    : '100vw';
 
 let heroClass = compact ? 'hero-header hero-compact' : 'hero-header';
 if (interactive) heroClass += ' hero-interactive';
@@ -31,8 +41,9 @@ if (interactive) heroClass += ' hero-interactive';
             <Picture
                 src={backgroundImage}
                 formats={['avif', 'webp']}
-                widths={[640, 960, 1280, 1440]}
-                sizes="100vw"
+                widths={imageWidths}
+                sizes={imageSizes}
+                quality={90}
                 alt=""
                 class="hero-bg-image"
                 loading="eager"
@@ -140,10 +151,20 @@ if (interactive) heroClass += ' hero-interactive';
         cursor: default; /* Indicate this area is special */
     }
 
+    .hero-interactive .hero-overlay {
+        background: linear-gradient(
+            180deg,
+            rgba(5, 12, 25, 0.2) 0%,
+            rgba(5, 12, 25, 0.04) 30%,
+            rgba(5, 12, 25, 0.08) 65%,
+            rgba(5, 12, 25, 0.16) 100%
+        );
+    }
+
     .hero-title {
         font-size: clamp(2rem, 4.5vw, 2.5rem);
         font-weight: 700;
-        text-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+        text-shadow: 0 2px 6px rgba(5, 12, 25, 0.45);
         line-height: 1.4;
         color: white;
     }
@@ -154,6 +175,7 @@ if (interactive) heroClass += ' hero-interactive';
         margin-top: 0.5em;
         color: white;
         animation: fade-in-up 1s ease-out forwards;
+        text-shadow: 0 1px 5px rgba(5, 12, 25, 0.6);
         animation-delay: 2.5s; /* Wait for typewriter to mostly finish */
     }
 
