@@ -14,6 +14,7 @@ const socials = getRenderableSocials(profile.socials);
 const sameAs = buildSameAsLinks(profile);
 const profileAvatar = profile.avatar;
 const profileAvatarSrc = typeof profileAvatar === 'string' ? profileAvatar : profileAvatar?.src;
+const milestones = profile.milestones;
 
 const personSchema = {
   '@context': 'https://schema.org',
@@ -205,6 +206,105 @@ const personSchema = {
         box-shadow: 0 8px 18px rgba(var(--accent-rgb), 0.12);
       }
 
+      .journey {
+        margin-top: 2.5rem;
+        padding: 0 2.2em;
+      }
+
+      .journey-heading {
+        display: flex;
+        align-items: baseline;
+        gap: 0.8rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .journey-heading h2 {
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 600;
+      }
+
+      .journey-example {
+        color: var(--color-text-secondary);
+        font-size: 0.75rem;
+      }
+
+      .journey-list {
+        --journey-date-width: 6rem;
+        --journey-marker-width: 2rem;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+      .journey-entry {
+        display: grid;
+        grid-template-columns: var(--journey-date-width) var(--journey-marker-width) minmax(0, 1fr);
+        position: relative;
+        padding-bottom: 1.4rem;
+        line-height: 1.65;
+      }
+
+      .journey-entry:last-child {
+        padding-bottom: 0;
+      }
+
+      .journey-entry:not(:last-child)::before,
+      .journey-entry:only-child::before {
+        content: '';
+        position: absolute;
+        top: 0.825rem;
+        bottom: -0.825rem;
+        left: calc(var(--journey-date-width) + var(--journey-marker-width) / 2);
+        width: 1px;
+        background: color-mix(in srgb, var(--color-text-muted) 36%, transparent);
+      }
+
+      .journey-entry:only-child::before {
+        top: -1rem;
+        bottom: -1rem;
+      }
+
+      .journey-date {
+        padding-top: 0.12rem;
+        color: var(--color-text-secondary);
+        font-size: 0.85rem;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .journey-marker {
+        z-index: 1;
+        justify-self: center;
+        width: 7px;
+        height: 7px;
+        margin-top: calc(0.825rem - 4px);
+        border: 1px solid var(--color-text-muted);
+        border-radius: 50%;
+        background: var(--color-bg);
+        transform: translateX(0.5px);
+      }
+
+      .journey-entry.is-current .journey-marker {
+        border-color: var(--accent);
+        background: var(--accent);
+      }
+
+      .journey-text {
+        margin: 0;
+        padding-left: 0.7rem;
+        color: var(--color-text);
+        font-size: 0.95rem;
+        overflow-wrap: anywhere;
+      }
+
+      .journey-current {
+        display: inline-block;
+        margin-left: 0.65rem;
+        color: var(--accent);
+        font-size: 0.75rem;
+        white-space: nowrap;
+      }
+
       @media (max-width: 980px) {
         .profile-card {
           grid-template-columns: 1fr;
@@ -225,6 +325,21 @@ const personSchema = {
       }
 
       @media (max-width: 720px) {
+        .journey {
+          margin-top: 2rem;
+          padding: 0 1.6em;
+        }
+
+        .journey-list {
+          --journey-date-width: 4.4rem;
+          --journey-marker-width: 1.25rem;
+        }
+
+        .journey-text {
+          padding-left: 0.5rem;
+          font-size: 0.9rem;
+        }
+
         .profile-card {
           border-radius: 0;
         }
@@ -358,6 +473,32 @@ const personSchema = {
             )}
           </div>
         </article>
+        {milestones && milestones.entries.length > 0 && (
+          <section class="journey" aria-labelledby="journey-title">
+            <div class="journey-heading">
+              <h2 id="journey-title">经历</h2>
+              {milestones.isExample && <span class="journey-example">示例内容</span>}
+            </div>
+            <ol class="journey-list" role="list">
+              {milestones.entries.map((milestone) => (
+                <li class:list={['journey-entry', { 'is-current': milestone.current }]}>
+                  {milestone.date ? (
+                    <time class="journey-date" datetime={milestone.date}>
+                      {milestone.date.replace('-', '.')}
+                    </time>
+                  ) : (
+                    <span class="journey-date">{milestone.current ? '现在' : '—'}</span>
+                  )}
+                  <span class="journey-marker" aria-hidden="true"></span>
+                  <p class="journey-text">
+                    {milestone.text}
+                    {milestone.current && milestone.date && <span class="journey-current">至今</span>}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
       </div>
     </ContentCard>
   </div>

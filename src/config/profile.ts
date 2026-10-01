@@ -15,6 +15,13 @@ export interface ProfileSocialLink {
   url: string;
 }
 
+export interface ProfileMilestone {
+  /** Optional start month in YYYY-MM format, displayed in the configured order. */
+  date?: string;
+  text: string;
+  current?: boolean;
+}
+
 /**
  * Personal profile settings used by About page and article author schema.
  */
@@ -51,6 +58,10 @@ export interface ProfileConfig {
    * Social links displayed in About page social row.
    */
   socials: ProfileSocialLink[];
+  milestones?: {
+    isExample?: boolean;
+    entries: ProfileMilestone[];
+  };
 }
 
 export const profileConfig: ProfileConfig = {
@@ -68,4 +79,9 @@ export const profileConfig: ProfileConfig = {
       url: 'https://github.com/LunarScoop',
     },
   ],
+  milestones: {
+    entries: [
+      { date: '2024-09', text: '就读于广东工业大学 · 计算机专业', current: true },
+    ],
+  },
 };
