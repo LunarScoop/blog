@@ -4,7 +4,7 @@ description: "解读 ICLR 2024 论文 CoT3DRef：从锚点监督、逻辑路径�
 pubDate: 2026-09-22
 updatedDate: 2026-09-30
 tags:
-  - paperreading
+  - Paper Reading
   - 3D Visual Grounding
 heroImage: "../../assets/blog/cot3dref-overview.png"
 ---
