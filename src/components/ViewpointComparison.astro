@@ -1,0 +1,35 @@
+---
+const views = [
+  { name: 'A', side: '右', nightstandX: 434, arrow: 'M286 385V322M262 346L286 322L310 346' },
+  { name: 'B', side: '左', nightstandX: 42, arrow: 'M286 322V385M262 361L286 385L310 361' },
+];
+---
+<div class="viewpoint-comparison">
+  {views.map(view => (
+    <figure>
+      <svg viewBox="0 0 570 410" role="img" aria-label={`视角 ${view.name}：床头柜在床的${view.side}侧，箭头表示观察方向`}>
+        <rect class="bed" x="140" y="50" width="286" height="245" rx="28" stroke-width="5" />
+        <rect class="pillow" x="167" y="67" width="232" height="58" rx="18" />
+        <text class="bed-label" x="283" y="208" text-anchor="middle">床</text>
+        <rect class="nightstand" x={view.nightstandX} y="150" width="93" height="102" rx="11" stroke-width="3" />
+        <text class="anchor-label" x={view.nightstandX + 46.5} y="130" text-anchor="middle">床头柜</text>
+        <path class="view-arrow" d={view.arrow} fill="none" stroke-width="7" stroke-linejoin="miter" />
+      </svg>
+      <figcaption>视角 {view.name}：床头柜在{view.side}侧</figcaption>
+    </figure>
+  ))}
+</div>
+<style>
+  .viewpoint-comparison { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.2rem; margin:1.6rem 0; background:transparent; }
+  .viewpoint-comparison figure { margin:0; min-width:0; background:transparent; }
+  .viewpoint-comparison svg { display:block; width:100%; height:auto; background:transparent; font-family:inherit; }
+  .bed { fill:#b6c9e4; stroke:#6589bd; }
+  .pillow { fill:#eef2f8; }
+  .bed-label { fill:#234061; font-size:50px; }
+  .nightstand { fill:#d9aa6d; stroke:#a87b45; }
+  .anchor-label { fill:var(--color-text); font-size:28px; }
+  .view-arrow { stroke:#15896c; }
+  :global([data-theme="dark"]) .view-arrow { stroke:#34d399; }
+  .viewpoint-comparison figcaption { margin:0.5rem 0 0; color:var(--color-text-secondary); font-size:0.85em; line-height:1.6; text-align:center; }
+  @media(max-width:540px) { .viewpoint-comparison { gap:0.5rem; } .viewpoint-comparison figcaption { font-size:0.75em; } }
+</style>

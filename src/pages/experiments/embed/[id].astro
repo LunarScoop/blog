@@ -1,0 +1,32 @@
+---
+import ExperimentChart from '../../../components/ExperimentChart.astro';
+import results from '../../../data/experiments/viewsrd.json';
+export function getStaticPaths() {
+  return Object.values(results.charts).map(config => ({ params: { id: config.id }, props: { config } }));
+}
+const { config } = Astro.props;
+---
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{config.title}</title>
+    <script>
+      // Same-origin Markdown iframe follows the parent site's theme; standalone defaults to dark.
+      let observer: MutationObserver | undefined;
+      try {
+        const parentRoot = window.parent.document.documentElement;
+        if (window.parent !== window) {
+          const sync = () => document.documentElement.dataset.theme = parentRoot.dataset.theme || 'dark';
+          sync();
+          observer = new MutationObserver(sync);
+          observer.observe(parentRoot, { attributes: true, attributeFilter: ['data-theme'] });
+        }
+      } catch { /* Cross-origin standalone embed keeps dark theme. */ }
+      window.addEventListener('pagehide', () => observer?.disconnect(), { once: true });
+    </script>
+    <style is:global>html,body { margin:0; background:transparent; } experiment-chart.experiment { margin:0; }</style>
+  </head>
+  <body><ExperimentChart config={config} /></body>
+</html>

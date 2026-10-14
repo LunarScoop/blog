@@ -1,0 +1,71 @@
+---
+import { chartType, displayValue, palette, validateConfig } from '../lib/experiments/config';
+interface Props { config: unknown; showControls?: boolean }
+const { config, showControls = false } = Astro.props;
+validateConfig(config);
+const type = chartType(config);
+const serialized = JSON.stringify(config).replaceAll('<', '\\u003c');
+---
+<experiment-chart class="experiment" data-chart-id={config.id}>
+  <script is:inline type="application/json" data-config set:html={serialized} />
+  <header class="experiment__header">
+    <div><span class="experiment__eyebrow">EXPERIMENT RESULTS</span><h3>{config.title}</h3><p>{config.metric} · {config.unit || '无量纲'}</p></div>
+    {showControls && <div class="experiment__tools">
+      <button type="button" data-export="svg" disabled>SVG</button>
+      <button type="button" data-export="png" disabled>PNG</button>
+      <button type="button" data-clear disabled>取消固定</button>
+    </div>}
+  </header>
+  <div class="experiment__legend" aria-label={type === 'heatmap' ? '热力图说明' : '方法图例'}>
+    {type === 'heatmap' ? <span>纵轴：参数组合 · 色阶：{config.metric}（{config.unit || '无量纲'}）</span> : config.series.map((s, i) => <span><i style={`background:${s.color || palette[i % palette.length]}`} />{s.name}</span>)}
+  </div>
+  {type !== 'table' && <div class="experiment__plot" tabindex="0" role="group" aria-label={`${config.title}。方向键选择数据，Enter 或空格固定，Escape 取消。`} />}
+  <div class="experiment__tooltip" role="status" aria-live="polite" hidden><span data-tip-color /><span data-tip-text /></div>
+  <p class="experiment__help">悬停查看 · 点击或轻触固定 · 再次点击或点空白取消 · 方向键浏览，Enter 固定，Esc 取消。缺失值不绘制。</p>
+  <p class="experiment__source"><a href={config.source.url} target="_blank" rel="noopener noreferrer">{config.source.label}</a>：{config.source.note}</p>
+  <details class="experiment__data" open={type === 'table'}>
+    <summary>查看数据表（含全部数值与缺失项）</summary>
+    <div class="experiment__table-scroll">
+      <table>
+        <caption>{config.title} — {config.metric}（{config.unit || '无量纲'}）</caption>
+        <thead><tr><th scope="col">{config.xLabel}</th>{config.series.map(s => <th scope="col">{s.name}</th>)}</tr></thead>
+        <tbody>{config.categories.map((label, d) => <tr><th scope="row">{label}</th>{config.series.map((s, i) => <td><button type="button" data-point={`${i}:${d}`} aria-label={`${label}，${s.name}，${config.metric} ${displayValue(config, s.values[d])}`}>{displayValue(config, s.values[d])}</button></td>)}</tr>)}</tbody>
+      </table>
+    </div>
+  </details>
+</experiment-chart>
+<script>
+  import '../scripts/experiment-chart';
+</script>
+<style>
+  .experiment { display:block; position:relative; min-width:0; margin:2rem 0; padding:1.25rem; border:1px solid #263447; border-radius:16px; background:#101923; color:#e2e8f0; color-scheme:dark; font-family:system-ui,sans-serif; }
+  :global([data-theme="light"]) .experiment { background:#f5f8fc; color:#1e293b; border-color:#d6e0ec; color-scheme:light; }
+  .experiment__header { display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between; align-items:flex-start; }
+  .experiment__eyebrow { font-size:0.66rem; letter-spacing:0.15em; color:#60a5fa; }
+  .experiment h3 { margin:0.3rem 0 !important; border:0 !important; color:inherit !important; font-size:1.1rem !important; line-height:1.5; }
+  .experiment p { margin:0.4rem 0; color:inherit; font-size:0.8rem; line-height:1.65; opacity:0.8; }
+  .experiment__tools { display:flex; flex-wrap:wrap; gap:0.4rem; }
+  .experiment button { font:inherit; color:inherit; background:transparent; border:1px solid #64748b; border-radius:7px; padding:0.45rem 0.65rem; cursor:pointer; font-size:0.75rem; min-height:36px; }
+  .experiment button:disabled { opacity:0.4; cursor:default; }
+  .experiment button:focus-visible,.experiment__plot:focus-visible { outline:2px solid #60a5fa; outline-offset:3px; }
+  .experiment button:hover:not(:disabled) { background:#60a5fa22; }
+  .experiment__legend { display:flex; flex-wrap:wrap; gap:0.5rem 1rem; margin:1rem 0; font-size:0.78rem; }
+  .experiment__legend span { display:inline-flex; align-items:center; gap:0.4rem; }
+  .experiment__legend i { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
+  .experiment__plot { width:100%; height:380px; min-width:0; touch-action:pan-y; }
+  .experiment__tooltip { position:absolute; z-index:5; max-width:min(320px,calc(100% - 24px)); box-sizing:border-box; background:#263140; color:#f8fafc; box-shadow:0 8px 25px #0005; border:1px solid #4b5a6f; padding:0.7rem 0.85rem; border-radius:10px; font-size:0.8rem; line-height:1.7; pointer-events:none; white-space:pre-line; overflow-wrap:anywhere; }
+  .experiment__tooltip[hidden] { display:none; }
+  .experiment__tooltip [data-tip-color] { display:inline-block; width:9px; height:9px; border-radius:3px; margin-right:0.5rem; }
+  .experiment__source a { color:#60a5fa; }
+  :global([data-theme="light"]) .experiment__source a { color:#2563eb; }
+  .experiment__data { margin-top:1rem; font-size:0.8rem; }
+  .experiment summary { cursor:pointer; padding:0.4rem 0; }
+  .experiment__table-scroll { max-width:100%; overflow-x:auto; }
+  .experiment table { width:100%; margin:0.8rem 0 !important; border-collapse:collapse; background:transparent !important; box-shadow:none !important; color:inherit !important; }
+  .experiment caption { text-align:left; font-size:0.75rem; padding:0.4rem; }
+  .experiment th,.experiment td { padding:0.45rem !important; border:1px solid #64748b55 !important; background:transparent !important; color:inherit !important; white-space:nowrap; }
+  .experiment tr { background:transparent !important; }
+  .experiment td button { border-color:transparent; }
+  @media(max-width:600px) { .experiment { padding:0.8rem; } .experiment__plot { height:390px; } }
+  @media print { .experiment { background:white; color:#1e293b; break-inside:avoid; } .experiment__tools,.experiment__help,.experiment__tooltip { display:none; } .experiment__data { display:block; } .experiment__data > div { display:block; } }
+</style>

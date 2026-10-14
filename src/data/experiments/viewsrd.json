@@ -1,0 +1,789 @@
+{
+  "paper": {
+    "title": "ViewSRD: 3D Visual Grounding via Structured Multi-View Decomposition",
+    "conference": "ICCV 2025",
+    "pages": "9726–9736",
+    "url": "https://openaccess.thecvf.com/content/ICCV2025/papers/Huang_ViewSRD_3D_Visual_Grounding_via_Structured_Multi-View_Decomposition_ICCV_2025_paper.pdf",
+    "supplement": "https://openaccess.thecvf.com/content/ICCV2025/supplemental/Huang_ViewSRD_3D_Visual_ICCV_2025_supplemental.pdf",
+    "provenance": "Manually transcribed and visually checked against the supplied ICCV PDF. No independent reproduction. No standard deviation reported in these tables."
+  },
+  "tables": {
+    "table1": {
+      "3DVG-Transformer": [
+        40.8,
+        48.5,
+        34.8,
+        34.8,
+        43.7,
+        51.4,
+        54.2,
+        44.9,
+        44.6,
+        51.7
+      ],
+      "LanguageRefer": [
+        43.9,
+        51.0,
+        36.6,
+        41.7,
+        45.0,
+        56.0,
+        58.9,
+        49.3,
+        49.2,
+        56.3
+      ],
+      "TransRefer3D": [
+        42.1,
+        48.5,
+        36.0,
+        36.5,
+        44.9,
+        57.4,
+        60.5,
+        50.2,
+        49.9,
+        57.7
+      ],
+      "SAT": [
+        49.2,
+        56.3,
+        42.4,
+        46.9,
+        50.4,
+        57.9,
+        61.2,
+        50.0,
+        49.2,
+        58.3
+      ],
+      "MVT": [
+        55.1,
+        61.3,
+        49.1,
+        54.3,
+        55.4,
+        64.5,
+        66.9,
+        58.8,
+        58.4,
+        64.7
+      ],
+      "ViewRefer": [
+        56.0,
+        63.0,
+        49.7,
+        55.1,
+        56.8,
+        67.0,
+        68.9,
+        62.1,
+        52.2,
+        67.7
+      ],
+      "MiKASA": [
+        64.4,
+        69.7,
+        59.4,
+        65.4,
+        64.0,
+        75.2,
+        78.6,
+        67.3,
+        70.4,
+        75.4
+      ],
+      "CoT3DRef": [
+        64.4,
+        70.0,
+        59.2,
+        61.9,
+        65.7,
+        73.2,
+        75.2,
+        67.9,
+        67.6,
+        73.5
+      ],
+      "ViewSRD": [
+        69.9,
+        75.3,
+        64.8,
+        68.6,
+        70.6,
+        76.0,
+        78.3,
+        70.6,
+        69.0,
+        76.2
+      ]
+    },
+    "table2": {
+      "MVT": [
+        52.6,
+        56.6,
+        55.1
+      ],
+      "CoT3DRef": [
+        63.1,
+        65.2,
+        64.4
+      ],
+      "ViewSRD": [
+        71.5,
+        69.5,
+        69.9
+      ]
+    },
+    "table3": {
+      "MVT": [
+        77.7,
+        66.5,
+        31.9,
+        25.3,
+        40.8,
+        33.3
+      ],
+      "MVT+SRD": [
+        78.6,
+        67.2,
+        34.1,
+        27.1,
+        42.1,
+        34.3
+      ],
+      "BUTD-DETR": [
+        82.8,
+        64.9,
+        44.7,
+        33.9,
+        50.4,
+        38.6
+      ],
+      "BUTD-DETR+SRD": [
+        85.0,
+        66.2,
+        45.3,
+        34.2,
+        57.9,
+        45.7
+      ],
+      "EDA": [
+        80.4,
+        65.3,
+        35.6,
+        25.1,
+        43.6,
+        32.3
+      ],
+      "EDA+SRD": [
+        81.0,
+        67.3,
+        36.4,
+        28.3,
+        44.4,
+        35.3
+      ],
+      "ViewSRD": [
+        82.1,
+        68.2,
+        37.4,
+        29.0,
+        45.4,
+        36.0
+      ]
+    },
+    "table4": {
+      "w/o CCVTs": [
+        62.2,
+        68.5,
+        56.1,
+        60.1,
+        63.2
+      ],
+      "w/o Textual M.": [
+        68.0,
+        73.5,
+        62.6,
+        67.6,
+        68.1
+      ],
+      "w/o Scene M.": [
+        64.6,
+        70.5,
+        58.9,
+        63.8,
+        64.9
+      ],
+      "w/o SRD M.": [
+        68.6,
+        73.0,
+        64.8,
+        66.5,
+        70.0
+      ],
+      "w/o Weight": [
+        69.0,
+        74.2,
+        64.0,
+        66.5,
+        70.2
+      ],
+      "LLM-Aug.": [
+        69.1,
+        74.5,
+        63.7,
+        68.0,
+        69.5
+      ],
+      "ViewSRD": [
+        69.9,
+        75.3,
+        64.8,
+        68.6,
+        70.6
+      ]
+    },
+    "table5": [
+      {
+        "train": 4,
+        "test": 1,
+        "values": [
+          66.0,
+          71.7,
+          60.5,
+          64.0,
+          67.0
+        ]
+      },
+      {
+        "train": 4,
+        "test": 2,
+        "values": [
+          68.9,
+          75.1,
+          63.0,
+          66.9,
+          69.9
+        ]
+      },
+      {
+        "train": 4,
+        "test": 4,
+        "values": [
+          69.9,
+          75.3,
+          64.8,
+          68.6,
+          70.6
+        ]
+      },
+      {
+        "train": 1,
+        "test": 1,
+        "values": [
+          64.4,
+          70.9,
+          58.1,
+          60.8,
+          66.2
+        ]
+      },
+      {
+        "train": 2,
+        "test": 2,
+        "values": [
+          67.7,
+          73.0,
+          62.5,
+          66.1,
+          68.4
+        ]
+      },
+      {
+        "train": 8,
+        "test": 8,
+        "values": [
+          68.4,
+          74.1,
+          63.0,
+          67.4,
+          68.9
+        ]
+      }
+    ],
+    "table6": {
+      "OpenChat": 69.6,
+      "DeepSeek-R1": 69.9,
+      "Qwen-Plus": 70.5,
+      "Qwen-Turbo": 70.7
+    },
+    "supplementTable1": [
+      [
+        1,
+        1,
+        0,
+        69.1
+      ],
+      [
+        1,
+        0,
+        1,
+        63.9
+      ],
+      [
+        1,
+        0.25,
+        0.25,
+        68.4
+      ],
+      [
+        1,
+        0.5,
+        0.5,
+        69.9
+      ],
+      [
+        1,
+        0.75,
+        0.75,
+        69.6
+      ],
+      [
+        1,
+        1,
+        1,
+        69.8
+      ]
+    ]
+  },
+  "charts": {
+    "nr3d": {
+      "id": "viewsrd-nr3d",
+      "title": "Nr3D：三种方法的分组比较",
+      "kind": "comparison",
+      "chart": "auto",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "评估子集",
+      "categories": [
+        "Overall",
+        "Easy",
+        "Hard",
+        "View Dep.",
+        "View Indep."
+      ],
+      "series": [
+        {
+          "name": "MiKASA",
+          "values": [
+            64.4,
+            69.7,
+            59.4,
+            65.4,
+            64.0
+          ]
+        },
+        {
+          "name": "CoT3DRef",
+          "values": [
+            64.4,
+            70.0,
+            59.2,
+            61.9,
+            65.7
+          ]
+        },
+        {
+          "name": "ViewSRD",
+          "values": [
+            69.9,
+            75.3,
+            64.8,
+            68.6,
+            70.6
+          ]
+        }
+      ],
+      "source": {
+        "label": "ViewSRD · 表 1（PDF 第 7 页）",
+        "url": "https://openaccess.thecvf.com/content/ICCV2025/papers/Huang_ViewSRD_3D_Visual_Grounding_via_Structured_Multi-View_Decomposition_ICCV_2025_paper.pdf",
+        "note": "作者报告值；非独立复现。未报告标准差，不绘制误差线。"
+      }
+    },
+    "sr3d": {
+      "id": "viewsrd-sr3d",
+      "title": "Sr3D：三种方法的分组比较",
+      "kind": "comparison",
+      "chart": "auto",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "评估子集",
+      "categories": [
+        "Overall",
+        "Easy",
+        "Hard",
+        "View Dep.",
+        "View Indep."
+      ],
+      "series": [
+        {
+          "name": "MiKASA",
+          "values": [
+            75.2,
+            78.6,
+            67.3,
+            70.4,
+            75.4
+          ]
+        },
+        {
+          "name": "CoT3DRef",
+          "values": [
+            73.2,
+            75.2,
+            67.9,
+            67.6,
+            73.5
+          ]
+        },
+        {
+          "name": "ViewSRD",
+          "values": [
+            76.0,
+            78.3,
+            70.6,
+            69.0,
+            76.2
+          ]
+        }
+      ],
+      "source": {
+        "label": "ViewSRD · 表 1（PDF 第 7 页）",
+        "url": "https://openaccess.thecvf.com/content/ICCV2025/papers/Huang_ViewSRD_3D_Visual_Grounding_via_Structured_Multi-View_Decomposition_ICCV_2025_paper.pdf",
+        "note": "作者报告值；非独立复现。未报告标准差，不绘制误差线。"
+      }
+    },
+    "anchors": {
+      "id": "viewsrd-anchors",
+      "title": "Nr3D：多锚点与单锚点描述",
+      "kind": "comparison",
+      "chart": "auto",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "评估子集",
+      "categories": [
+        "Multi-Anc",
+        "Single-Anc",
+        "Overall"
+      ],
+      "series": [
+        {
+          "name": "MVT",
+          "values": [
+            52.6,
+            56.6,
+            55.1
+          ]
+        },
+        {
+          "name": "CoT3DRef",
+          "values": [
+            63.1,
+            65.2,
+            64.4
+          ]
+        },
+        {
+          "name": "ViewSRD",
+          "values": [
+            71.5,
+            69.5,
+            69.9
+          ]
+        }
+      ],
+      "source": {
+        "label": "ViewSRD · 表 2（PDF 第 7 页）",
+        "url": "https://openaccess.thecvf.com/content/ICCV2025/papers/Huang_ViewSRD_3D_Visual_Grounding_via_Structured_Multi-View_Decomposition_ICCV_2025_paper.pdf",
+        "note": "作者报告值；非独立复现。未报告标准差，不绘制误差线。"
+      }
+    },
+    "ablation": {
+      "id": "viewsrd-ablation",
+      "title": "Nr3D：组件消融",
+      "kind": "ablation",
+      "chart": "auto",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "模型配置",
+      "categories": [
+        "w/o CCVTs",
+        "w/o Textual M.",
+        "w/o Scene M.",
+        "w/o SRD M.",
+        "w/o Weight",
+        "LLM-Aug.",
+        "ViewSRD"
+      ],
+      "series": [
+        {
+          "name": "Overall",
+          "values": [
+            62.2,
+            68.0,
+            64.6,
+            68.6,
+            69.0,
+            69.1,
+            69.9
+          ]
+        },
+        {
+          "name": "View Dep.",
+          "values": [
+            60.1,
+            67.6,
+            63.8,
+            66.5,
+            66.5,
+            68.0,
+            68.6
+          ]
+        }
+      ],
+      "source": {
+        "label": "ViewSRD · 表 4（PDF 第 8 页）",
+        "url": "https://openaccess.thecvf.com/content/ICCV2025/papers/Huang_ViewSRD_3D_Visual_Grounding_via_Structured_Multi-View_Decomposition_ICCV_2025_paper.pdf",
+        "note": "作者报告值；非独立复现。未报告标准差，不绘制误差线。"
+      }
+    },
+    "scanrefer": {
+      "id": "viewsrd-scanrefer",
+      "title": "ScanRefer：SRD 接入前后的 Overall",
+      "kind": "comparison",
+      "chart": "auto",
+      "metric": "Acc@IoU threshold",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "方法",
+      "categories": [
+        "MVT",
+        "MVT+SRD",
+        "BUTD-DETR",
+        "BUTD-DETR+SRD",
+        "EDA",
+        "EDA+SRD",
+        "ViewSRD"
+      ],
+      "series": [
+        {
+          "name": "Acc@0.25",
+          "values": [
+            40.8,
+            42.1,
+            50.4,
+            57.9,
+            43.6,
+            44.4,
+            45.4
+          ]
+        },
+        {
+          "name": "Acc@0.5",
+          "values": [
+            33.3,
+            34.3,
+            38.6,
+            45.7,
+            32.3,
+            35.3,
+            36.0
+          ]
+        }
+      ],
+      "source": {
+        "label": "ViewSRD · 表 3（PDF 第 7 页）",
+        "url": "https://openaccess.thecvf.com/content/ICCV2025/papers/Huang_ViewSRD_3D_Visual_Grounding_via_Structured_Multi-View_Decomposition_ICCV_2025_paper.pdf",
+        "note": "原表照录；BUTD-DETR+SRD 的 Overall 与 Unique/Multiple 分组加权值存在明显不一致，待作者澄清，不用于确定增益结论。IoU 阈值是两个独立指标。"
+      }
+    },
+    "views": {
+      "id": "viewsrd-views",
+      "title": "Nr3D：视角数量与准确率",
+      "kind": "hyperparameter",
+      "chart": "line",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "测试视角数量",
+      "categories": [
+        "1",
+        "2",
+        "4",
+        "8"
+      ],
+      "series": [
+        {
+          "name": "训练与测试视角数相同",
+          "values": [
+            64.4,
+            67.7,
+            69.9,
+            68.4
+          ]
+        },
+        {
+          "name": "固定训练 4 视角",
+          "values": [
+            66.0,
+            68.9,
+            69.9,
+            null
+          ]
+        }
+      ],
+      "source": {
+        "label": "ViewSRD · 表 5（PDF 第 8 页）",
+        "url": "https://openaccess.thecvf.com/content/ICCV2025/papers/Huang_ViewSRD_3D_Visual_Grounding_via_Structured_Multi-View_Decomposition_ICCV_2025_paper.pdf",
+        "note": "两条曲线对应不同训练协议；固定训练 4 视角、测试 8 视角未报告，保留 null，无插值。"
+      }
+    },
+    "viewMatrix": {
+      "id": "viewsrd-view-matrix",
+      "title": "Nr3D：训练／测试视角组合",
+      "kind": "hyperparameter",
+      "chart": "auto",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "测试视角数量",
+      "categories": [
+        "1",
+        "2",
+        "4",
+        "8"
+      ],
+      "series": [
+        {
+          "name": "训练 1 视角",
+          "values": [
+            64.4,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "name": "训练 2 视角",
+          "values": [
+            null,
+            67.7,
+            null,
+            null
+          ]
+        },
+        {
+          "name": "训练 4 视角",
+          "values": [
+            66.0,
+            68.9,
+            69.9,
+            null
+          ]
+        },
+        {
+          "name": "训练 8 视角",
+          "values": [
+            null,
+            null,
+            null,
+            68.4
+          ]
+        }
+      ],
+      "source": {
+        "label": "ViewSRD · 表 5（PDF 第 8 页）",
+        "url": "https://openaccess.thecvf.com/content/ICCV2025/papers/Huang_ViewSRD_3D_Visual_Grounding_via_Structured_Multi-View_Decomposition_ICCV_2025_paper.pdf",
+        "note": "仅六个组合有报告结果，其余格子为空并在数据表标注缺失；颜色越接近绿色代表准确率越高。"
+      }
+    },
+    "llms": {
+      "id": "viewsrd-llms",
+      "title": "Nr3D：更换 SRD 语言模型",
+      "kind": "ablation",
+      "chart": "auto",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "LLM decoupler",
+      "categories": [
+        "OpenChat",
+        "DeepSeek-R1",
+        "Qwen-Plus",
+        "Qwen-Turbo"
+      ],
+      "series": [
+        {
+          "name": "ViewSRD",
+          "values": [
+            69.6,
+            69.9,
+            70.5,
+            70.7
+          ]
+        }
+      ],
+      "source": {
+        "label": "ViewSRD · 表 6（PDF 第 8 页）",
+        "url": "https://openaccess.thecvf.com/content/ICCV2025/papers/Huang_ViewSRD_3D_Visual_Grounding_via_Structured_Multi-View_Decomposition_ICCV_2025_paper.pdf",
+        "note": "作者报告值；非独立复现。未报告标准差，不绘制误差线。"
+      }
+    },
+    "weights": {
+      "id": "viewsrd-weights",
+      "title": "Nr3D：辅助损失权重",
+      "kind": "hyperparameter",
+      "chart": "auto",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "λObj = λSent（固定 λRef = 1.0）",
+      "categories": [
+        "0.25",
+        "0.5",
+        "0.75",
+        "1.0"
+      ],
+      "series": [
+        {
+          "name": "λObj = λSent",
+          "values": [
+            68.4,
+            69.9,
+            69.6,
+            69.8
+          ]
+        }
+      ],
+      "source": {
+        "label": "ViewSRD · 补充材料表 1（第 3 页）",
+        "url": "https://openaccess.thecvf.com/content/ICCV2025/supplemental/Huang_ViewSRD_3D_Visual_ICCV_2025_supplemental.pdf",
+        "note": "采用补充材料表头与表值。其 G 节段落交换了 λObj/λRef，正文与表格均支持 λRef=1.0、λObj=λSent=0.5。"
+      }
+    }
+  }
+}

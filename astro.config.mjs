@@ -7,10 +7,12 @@ import remarkBlockquoteLineBreaks from './src/plugins/remark-blockquote-line-bre
 import remarkHexoImages from './src/plugins/remark-hexo-images.mjs';
 import remarkSearchBlocks from './src/plugins/remark-search-blocks';
 import remarkMath from 'remark-math';
+import remarkGfm from 'remark-gfm';
 import rehypeImageCaptions from './src/plugins/rehype-image-captions.mjs';
 import rehypeKatex from 'rehype-katex';
 import rehypeLazyImages from './src/plugins/rehype-lazy-images.mjs';
 import rehypeExternalLinks from './src/plugins/rehype-external-links.mjs';
+import rehypeScrollableTables from './src/plugins/rehype-scrollable-tables.mjs';
 import { siteUrl } from './src/config/site';
 
 /** @returns {import('vite').Plugin} */
@@ -70,9 +72,9 @@ export default defineConfig({
 	},
 	markdown: {
 		// 支持 Hexo 相对图片路径 image/xxx/ 自动转换为 /image/xxx/
-		remarkPlugins: [remarkHexoImages, remarkMath, remarkBlockquoteLineBreaks, remarkSearchBlocks],
+		remarkPlugins: [remarkGfm, remarkHexoImages, remarkMath, remarkBlockquoteLineBreaks, remarkSearchBlocks],
 		// 使用 KaTeX 渲染数学公式，图片懒加载
-		rehypePlugins: [rehypeKatex, rehypeLazyImages, rehypeImageCaptions, rehypeExternalLinks],
+		rehypePlugins: [rehypeKatex, rehypeLazyImages, rehypeImageCaptions, rehypeExternalLinks, rehypeScrollableTables],
 		// 使用双主题支持代码高亮
 		shikiConfig: {
 			themes: {

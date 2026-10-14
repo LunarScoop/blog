@@ -1,0 +1,33 @@
+---
+import PageShell from '../../layouts/PageShell.astro';
+import ExperimentChart from '../../components/ExperimentChart.astro';
+import results from '../../data/experiments/viewsrd.json';
+const benchmark = {
+  ...results.charts.nr3d, id: 'viewsrd-benchmark-table', title: '表 1：全部方法的 Overall', chart: 'table', kind: 'benchmark', xLabel: '方法',
+  categories: Object.keys(results.tables.table1),
+  series: [{name:'Nr3D',values:Object.values(results.tables.table1).map(v=>v[0])},{name:'Sr3D',values:Object.values(results.tables.table1).map(v=>v[5])}],
+};
+---
+<PageShell title="实验可视化 · ViewSRD" description="使用论文真实表值的交互式分组柱状图、折线图、视角组合热力图与完整数据表。" transparentHeader={false}>
+  <main class="experiments-page">
+    <p class="eyebrow">RESEARCH NOTEBOOK / VIEW SRD</p>
+    <h1>实验可视化</h1>
+    <p>对比方法、检查消融、观察视角数量的变化。所有数据均来自 ViewSRD 论文表格，未独立复现。悬停查看精确值，点击或轻触固定；方向键浏览、Enter 固定、Esc 取消。可切换网站主题并导出图表。</p>
+    <p><a href="/blog/viewsrd-3d-visual-grounding/">阅读完整论文笔记 →</a></p>
+    <ExperimentChart config={results.charts.nr3d} showControls />
+    <ExperimentChart config={results.charts.ablation} showControls />
+    <ExperimentChart config={results.charts.views} showControls />
+    <h2>训练与测试视角：只展示报告过的组合</h2>
+    <p>颜色代表 Nr3D Overall 准确率。论文仅报告六个组合，空白格表示缺失。此处没有把未测量的组合估算为零，也没有根据附近格子插值。</p>
+    <ExperimentChart config={results.charts.viewMatrix} showControls />
+    <ExperimentChart config={benchmark} />
+    <p>没有真实训练日志，因此此页没有展示 Loss 或 Accuracy 训练曲线。组件支持训练数据折线图，待接入实际日志后使用。ScanRefer 原表疑点及其他实验分析见完整笔记。</p>
+  </main>
+</PageShell>
+<style>
+  .experiments-page { width:min(100% - 2rem,1080px); margin:6rem auto 3rem; }
+  h1 { font-size:clamp(2rem,5vw,3.4rem); margin:0.6rem 0 1rem; }
+  p { line-height:1.9; color:var(--color-text-secondary); }
+  .eyebrow { letter-spacing:0.16em; font-size:0.7rem; color:#60a5fa; }
+  a { color:var(--color-accent,#60a5fa); }
+</style>
