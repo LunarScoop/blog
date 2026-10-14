@@ -2,6 +2,7 @@ import rss from '@astrojs/rss';
 import { siteDescription, siteTitle } from '../config';
 import { getBlogPosts } from '../lib/content/blog';
 import { extractSeoDescription } from '../lib/content/text';
+import { contentFormat } from '../lib/content/parser';
 
 export async function GET(context) {
 	const posts = await getBlogPosts();
@@ -11,7 +12,7 @@ export async function GET(context) {
 		site: context.site,
 		items: posts.map((post) => {
 			const description =
-				post.data.description?.trim() || extractSeoDescription(post.body ?? '') || post.data.title;
+				post.data.description?.trim() || extractSeoDescription(post.body ?? '', 160, contentFormat(post.filePath)) || post.data.title;
 			return {
 				...post.data,
 				description,

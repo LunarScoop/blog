@@ -20,6 +20,15 @@ $$
 `;
 
 describe('Markdown search blocks', () => {
+	it('indexes MDX prose and math with the same IDs as the rendered article tree', () => {
+		const body = 'import Chart from "./Chart.astro";\n\nexport const data = { hidden: "internal" };\n\n# 实验\n\n正文 **准确率**。\n\n<Chart config={data} />\n\n{data.hidden}\n\n$$\nx^2\n$$';
+		const blocks = parseSearchBlocks(body, 'mdx');
+		expect(blocks.some(b=>b.text.includes('正文 准确率'))).toBe(true);
+		expect(blocks.some(b=>b.type==='math' && b.text==='x^2')).toBe(true);
+		expect(blocks.some(b=>/import|export|config|internal|Chart/.test(b.text))).toBe(false);
+		const plain = parseSearchBlocks('# 实验\n\n正文 **准确率**。\n\n$$\nx^2\n$$');
+		expect(blocks).toEqual(plain);
+	});
 	it('extracts readable prose, tables, code and math', () => {
 		const blocks = parseSearchBlocks(ARTICLE);
 		expect(blocks.some((block) => block.type === 'heading' && block.text === '全文索引')).toBe(true);

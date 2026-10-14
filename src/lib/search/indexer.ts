@@ -1,12 +1,14 @@
 import type { BlogPost } from '../content/blog';
 import type { Project } from '../content/projects';
 import { extractExcerpt } from '../content/text';
+import { contentFormat } from '../content/parser';
 import { parseSearchBlocks } from './markdown';
 import type { SearchDocument } from './types';
 
 export function createSearchDocument(post: BlogPost): SearchDocument {
 	const body = post.body ?? '';
-	const excerpt = extractExcerpt(body, 200);
+	const format = contentFormat(post.filePath);
+	const excerpt = extractExcerpt(body, 200, format);
 	return {
 		id: post.id,
 		title: post.data.title,
@@ -15,7 +17,7 @@ export function createSearchDocument(post: BlogPost): SearchDocument {
 		tags: post.data.tags,
 		categories: post.data.categories,
 		url: `/blog/${post.id}/`,
-		blocks: parseSearchBlocks(body),
+		blocks: parseSearchBlocks(body, format),
 	};
 }
 
@@ -25,7 +27,8 @@ export function createSearchIndex(posts: BlogPost[]): SearchDocument[] {
 
 export function createProjectSearchDocument(project: Project): SearchDocument {
 	const body = project.body ?? '';
-	const excerpt = extractExcerpt(body, 200);
+	const format = contentFormat(project.filePath);
+	const excerpt = extractExcerpt(body, 200, format);
 	return {
 		id: `project:${project.id}`,
 		title: project.data.title,
@@ -34,7 +37,7 @@ export function createProjectSearchDocument(project: Project): SearchDocument {
 		tags: project.data.technologies,
 		categories: ['Projects'],
 		url: `/projects/${project.id}/`,
-		blocks: parseSearchBlocks(body),
+		blocks: parseSearchBlocks(body, format),
 	};
 }
 

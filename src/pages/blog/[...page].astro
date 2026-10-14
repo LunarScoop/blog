@@ -17,6 +17,7 @@ import {
   getBlogPageUrls,
 } from '../../lib/content/blog-page-path';
 import { extractExcerpt } from '../../lib/content/text';
+import { contentFormat } from '../../lib/content/parser';
 import { getProjects } from '../../lib/content/projects';
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
@@ -461,7 +462,7 @@ if (last > 1) paginationList.push(last);
                   titleClass="blog-post-title"
                   excerptClass="blog-post-excerpt"
                   showExcerpt={true}
-                  excerpt={extractExcerpt(post.body || '', 160)}
+                  excerpt={extractExcerpt(post.body || '', 160, contentFormat(post.filePath))}
                   metaContainerClass="blog-post-meta"
                   metaItemClass="blog-post-meta-item"
                   metaTagsClass="blog-post-tags"

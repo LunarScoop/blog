@@ -1,9 +1,6 @@
 import type { Root } from 'mdast';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import remarkParse from 'remark-parse';
-import { unified } from 'unified';
-import { visit } from 'unist-util-visit';
+import { SKIP, visit } from 'unist-util-visit';
+import { isHiddenContent, parseContentTree, visibleHtmlText, type ContentFormat } from '../content/parser';
 import { createSearchBlockId, normalizeSearchText } from './text';
 import type { SearchBlock, SearchBlockType } from './types';
 
@@ -27,12 +24,11 @@ const SEARCHABLE_TYPES = new Map<string, SearchBlockType>([
 ]);
 
 function nodeText(node: SearchableNode): string {
+	if (isHiddenContent(node)) return '';
 	if (node.type === 'image') return node.alt ?? '';
 	if (typeof node.value === 'string') {
 		return node.type === 'html'
-			? node.value
-				.replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/giu, ' ')
-				.replace(/<[^>]+>/gu, ' ')
+			? visibleHtmlText(node.value)
 			: node.value;
 	}
 	return (node.children ?? []).map(nodeText).join(' ');
@@ -44,6 +40,7 @@ export function assignSearchBlocks(tree: Root): SearchBlock[] {
 
 	visit(tree, (rawNode) => {
 		const node = rawNode as SearchableNode;
+		if (isHiddenContent(node)) return SKIP;
 		const blockType = SEARCHABLE_TYPES.get(node.type);
 		if (!blockType) return;
 
@@ -65,11 +62,7 @@ export function assignSearchBlocks(tree: Root): SearchBlock[] {
 	return blocks;
 }
 
-export function parseSearchBlocks(markdown: string): SearchBlock[] {
-	const tree = unified()
-		.use(remarkParse)
-		.use(remarkGfm)
-		.use(remarkMath)
-		.parse(markdown) as Root;
+export function parseSearchBlocks(markdown: string, format: ContentFormat = 'md'): SearchBlock[] {
+	const tree = parseContentTree(markdown, format);
 	return assignSearchBlocks(tree);
 }

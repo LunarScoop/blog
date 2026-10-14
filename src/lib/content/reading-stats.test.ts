@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { getReadingStats } from './reading-stats';
 
 describe('article reading statistics', () => {
+	it('counts MDX prose without imports, exports, JSX props or expressions', () => {
+		const body = 'import Chart from "./Chart.astro";\n\nexport const data = { value: "hidden" };\n\n正文\n\n<Chart config={data} />\n\n{data.value}';
+		expect(getReadingStats(body, 'mdx')).toEqual({ wordCount: 2, readingTime: 1 });
+	});
 	it('counts Chinese characters and English words, including adjacent mixed text', () => {
 		expect(getReadingStats('脑电EEG分析，Qwen3-235B tools，69.30%。')).toEqual({
 			wordCount: 8,

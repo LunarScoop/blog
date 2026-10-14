@@ -4,6 +4,7 @@ import ProjectPost from '../../layouts/ProjectPost.astro';
 import { getProjects } from '../../lib/content/projects';
 import { getReadingStats } from '../../lib/content/reading-stats';
 import { extractSeoDescription } from '../../lib/content/text';
+import { contentFormat } from '../../lib/content/parser';
 
 export async function getStaticPaths() {
 	const projects = await getProjects();
@@ -15,15 +16,16 @@ export async function getStaticPaths() {
 
 type Props = CollectionEntry<'projects'>;
 const project = Astro.props as Props;
+const format = contentFormat(project.filePath);
 const { Content, headings } = await render(project);
 const seoDescription = (
 	project.data.description.trim() ||
-	extractSeoDescription(project.body ?? '') ||
+	extractSeoDescription(project.body ?? '', 160, format) ||
 	project.data.title
 ).trim();
 const body = project.body ?? '';
 const hasMath = /\$\$[\s\S]*?\$\$|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\]|\$[^$\n]+\$|\\begin\{[a-zA-Z*]+\}/.test(body);
-const { wordCount, readingTime } = getReadingStats(body);
+const { wordCount, readingTime } = getReadingStats(body, format);
 ---
 
 <ProjectPost

@@ -17,6 +17,29 @@ page.on('console', message => { if (message.type() === 'error' && !message.text(
 const card = page.locator('experiment-chart[data-chart-id="viewsrd-nr3d"]');
 const bar = () => card.locator('svg path[fill="#60a5fa"]').first();
 try {
+  const articleURL = '/blog/viewsrd-3d-visual-grounding/';
+  for (const route of ['/blog/', '/tags/', '/tags/Paper%20Reading/', '/tags/3D%20Visual%20Grounding/']) {
+    await page.goto(`${base}${route}`);
+    const listing = page.locator('article').filter({has:page.locator(`a[href="${articleURL}"]`)}).first();
+    const excerpt = await listing.locator('.blog-post-excerpt,.tag-post-excerpt').textContent();
+    assert.match(excerpt,/^三维视觉定位/);
+    assert.doesNotMatch(excerpt,/import |export |\.astro|results\.charts/);
+    if(route==='/blog/') {
+      await listing.scrollIntoViewIfNeeded();
+      await page.waitForFunction(href=>{
+        const link=[...document.querySelectorAll('article a')].find(el=>el.getAttribute('href')===href);
+        if(!link) return false;
+        for(let el=link.closest('article');el;el=el.parentElement) if(Number(getComputedStyle(el).opacity)<0.99) return false;
+        return true;
+      },articleURL);
+      await listing.screenshot({path:`${output}/blog-excerpt-fixed.png`});
+    }
+  }
+  const response = await page.request.get(`${base}/search-index.json`);
+  const searchDoc = (await response.json()).find(doc=>doc.id==='viewsrd-3d-visual-grounding');
+  assert.match(searchDoc.excerpt,/^三维视觉定位/);
+  assert.ok(searchDoc.blocks.every(block=>!/^import |^export |results\.charts|\.\/\.\.\/components/.test(block.text)));
+  checks.push('blog and tag excerpts + search index contain prose, without MDX source');
   await page.goto(`${base}/experiments/`);
   await page.waitForFunction(() => [...document.querySelectorAll('experiment-chart')].every(el => el.dataset.ready === 'true'));
   assert.equal(await page.locator('experiment-chart').count(), 5);
@@ -87,6 +110,9 @@ try {
   await page.waitForFunction(() => document.querySelectorAll('experiment-chart[data-ready="true"]').length === 8);
   await page.setViewportSize({width:1080,height:772});
   assert.ok(await page.locator('.katex').count() > 10);
+  const renderedIDs = await page.locator('.prose [data-search-block]').evaluateAll(els=>els.map(el=>el.getAttribute('data-search-block')));
+  const introBlock = searchDoc.blocks.find(block=>block.text.startsWith('三维视觉定位'));
+  assert.ok(renderedIDs.includes(introBlock.id), 'The MDX introduction search result should resolve to its rendered paragraph');
   // Check actual production MDX rendering, not only source syntax or chart hydration.
   const source = await readFile('src/content/blog/viewsrd-3d-visual-grounding.mdx', 'utf8');
   const expectedTables = source.match(/(?:^\|[^\n]*\|[ \t]*\r?\n)+/gm).map(table => table.trim().split(/\r?\n/).filter((_,i)=>i!==1).map(row=>row.trim().slice(1,-1).split('|').map(cell=>cell.trim())));

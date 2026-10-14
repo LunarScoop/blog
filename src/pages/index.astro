@@ -9,12 +9,13 @@ import { heroConfig, locale, siteDescription, siteTitle } from '../config';
 import { getBlogPosts } from '../lib/content/blog';
 import { getFeaturedProjects } from '../lib/content/projects';
 import { getReadingStats } from '../lib/content/reading-stats';
+import { contentFormat } from '../lib/content/parser';
 
 const posts = await getBlogPosts();
 const featuredProjects = await getFeaturedProjects(4);
 const siteURL = Astro.site ?? Astro.url;
 const postCount = posts.length;
-const wordCount = posts.reduce((acc, post) => acc + getReadingStats(post.body ?? '').wordCount, 0);
+const wordCount = posts.reduce((acc, post) => acc + getReadingStats(post.body ?? '', contentFormat(post.filePath)).wordCount, 0);
 const tagCount = new Set(posts.flatMap((post) => post.data.tags || [])).size;
 const sortedAscPosts = [...posts].sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
 const startDate = postCount > 0 ? sortedAscPosts[0].data.pubDate : null;

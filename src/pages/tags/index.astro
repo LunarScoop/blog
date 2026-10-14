@@ -6,6 +6,7 @@ import { heroConfig, siteTitle } from '../../config';
 import { getTagStats, getBlogPosts } from '../../lib/content/blog';
 import { getTagPath } from '../../lib/content/tag-path';
 import { extractExcerpt } from '../../lib/content/text';
+import { contentFormat } from '../../lib/content/parser';
 
 const sortedTags = await getTagStats();
 const posts = await getBlogPosts();
@@ -551,7 +552,7 @@ const tagsHero = heroConfig.tags;
 
           <div class="tag-posts-list" id="posts-list">
             {posts.map((post) => {
-              const excerpt = extractExcerpt(post.body || '', 160);
+              const excerpt = extractExcerpt(post.body || '', 160, contentFormat(post.filePath));
               return (
                 <div
                   class="post-card-wrapper"
