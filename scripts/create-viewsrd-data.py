@@ -51,7 +51,7 @@ weights = [(1,1,0,69.1),(1,0,1,63.9),(1,.25,.25,68.4),(1,.5,.5,69.9),(1,.75,.75,
 raw = dict(table1=dict(benchmark), table2=dict(anchors), table3=dict(scanrefer), table4=dict(ablation), table5=[dict(train=t,test=v,values=a) for t,v,a in views], table6=dict(llms), supplementTable1=weights)
 
 def chart(key,title,table,categories,series,kind='comparison',**extra):
-    return dict(id='viewsrd-'+key,title=title,kind=kind,chart='auto',metric='Grounding accuracy',unit='%',valueFormat='percent',decimals=1,xLabel='评估子集',categories=categories,series=[dict(name=n,values=v) for n,v in series],source=dict(label='ViewSRD · '+table,url=SUPP if table.startswith('补充') else PDF,note='作者报告值；非独立复现。未报告标准差，不绘制误差线。'),**extra)
+    return dict(id='viewsrd-'+key,title=title,kind=kind,chart='auto',metric='Grounding accuracy',unit='%',valueFormat='percent',decimals=1,xLabel='评估子集',categories=categories,series=[dict(name=n,values=v) for n,v in series],source=dict(label='ViewSRD · '+table,url=SUPP if table.startswith('补充') else PDF,note='数值来自论文实验表格，单位为 %。'),**extra)
 
 charts = {}
 for name,start in [('nr3d',0),('sr3d',5)]:
@@ -62,7 +62,7 @@ charts['ablation']['xLabel'] = '模型配置'
 charts['scanrefer'] = chart('scanrefer','ScanRefer：SRD 接入前后的 Overall','表 3（PDF 第 7 页）',[n for n,v in scanrefer],[('Acc@0.25',[v[4] for n,v in scanrefer]),('Acc@0.5',[v[5] for n,v in scanrefer])])
 charts['scanrefer']['metric'] = 'Acc@IoU threshold'
 charts['scanrefer']['xLabel'] = '方法'
-charts['scanrefer']['source']['note'] = '原表照录；BUTD-DETR+SRD 的 Overall 与 Unique/Multiple 分组加权值存在明显不一致，待作者澄清，不用于确定增益结论。IoU 阈值是两个独立指标。'
+charts['scanrefer']['source']['note'] = '原表照录。BUTD-DETR+SRD 的 Overall 与分组加权值不一致，正文增益分析采用 MVT 和 EDA 两组结果。'
 charts['views'] = chart('views','Nr3D：视角数量与准确率','表 5（PDF 第 8 页）',['1','2','4','8'],[('训练与测试视角数相同',[64.4,67.7,69.9,68.4]),('固定训练 4 视角',[66.0,68.9,69.9,None])],kind='hyperparameter')
 charts['views']['chart'] = 'line'
 charts['views']['xLabel'] = '测试视角数量'
@@ -74,7 +74,7 @@ charts['llms'] = chart('llms','Nr3D：更换 SRD 语言模型','表 6（PDF 第 
 charts['llms']['xLabel'] = 'LLM decoupler'
 charts['weights'] = chart('weights','Nr3D：辅助损失权重','补充材料表 1（第 3 页）',['0.25','0.5','0.75','1.0'],[('λObj = λSent',[68.4,69.9,69.6,69.8])],kind='hyperparameter')
 charts['weights']['xLabel'] = 'λObj = λSent（固定 λRef = 1.0）'
-charts['weights']['source']['note'] = '采用补充材料表头与表值。其 G 节段落交换了 λObj/λRef，正文与表格均支持 λRef=1.0、λObj=λSent=0.5。'
+charts['weights']['source']['note'] = '采用补充材料表 1 的配置，固定 λRef=1.0，比较不同辅助损失权重。'
 
 data = dict(paper=dict(title='ViewSRD: 3D Visual Grounding via Structured Multi-View Decomposition',conference='ICCV 2025',pages='9726–9736',url=PDF,supplement=SUPP,provenance='Manually transcribed and visually checked against the supplied ICCV PDF. No independent reproduction. No standard deviation reported in these tables.'),tables=raw,charts=charts)
 (ROOT/'src/data/experiments/viewsrd.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
