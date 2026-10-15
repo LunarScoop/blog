@@ -138,8 +138,14 @@ try {
   assert.deepEqual(await page.locator('.prose p,.prose li').evaluateAll(els=>els.map(el=>el.textContent).filter(t=>t.includes('**')||/^\|/.test(t))), []);
   assert.equal(await page.locator('.katex-error').count(),0);
   assert.equal(await page.locator('.prose [data-export],.prose [data-clear]').count(),0);
-  assert.equal(await page.locator('.prose strong').filter({hasText:'数值核对：'}).count(),1);
-  assert.equal(await page.locator('.prose strong').filter({hasText:'记号核对：'}).count(),1);
+  assert.equal(await page.locator('.prose p').filter({hasText:'论文正文将 Overall 增益写为 5.2%'}).count(),1);
+  assert.equal(await page.locator('.prose p').filter({hasText:'这里沿用正文的'}).count(),1);
+  assert.equal(await page.locator('.prose em').filter({hasText:/^图1：不同视角下的关系示意图$/}).count(),1);
+  assert.equal(await page.locator('.prose em').filter({hasText:/^图 2：ViewSRD 整体结构。$/}).count(),1);
+  const articleText = await page.locator('.prose').innerText();
+  for (const removed of ['这里需要避免把研究动机', '两种协议的数值不能混为', '这是作者提出 SRD 的动机', '依据用户提供的视角示意图重绘', '使用本次提供的截图', '论文中的多视角来自三维场景', '文章日期按本次阅读记录']) {
+    assert.ok(!articleText.includes(removed), `Removed editorial wording must stay absent: ${removed}`);
+  }
   for (let i=0;i<await tables.count();i++) {
     await tables.nth(i).scrollIntoViewIfNeeded();
     await tables.nth(i).screenshot({path:`${output}/article-table-${i+1}-1080.png`});
@@ -149,7 +155,7 @@ try {
     await img.evaluate(el=>el.decode());
     assert.ok(await img.evaluate(el=>el.naturalWidth)>0);
   }
-  await page.locator('.prose p').filter({hasText:'正文式（2）将 Softmax'}).screenshot({path:`${output}/view-weight-note.png`});
+  await page.locator('.prose p').filter({hasText:'正文式（2）对视角表示加权'}).screenshot({path:`${output}/view-weight-note.png`});
   const viewpoint = page.locator('.viewpoint-comparison');
   assert.equal(await viewpoint.locator('figure').count(),2);
   const figures = await viewpoint.locator('figure').evaluateAll(els=>els.map(el=>({x:el.getBoundingClientRect().x,y:el.getBoundingClientRect().y})));
@@ -158,7 +164,7 @@ try {
   const loss = tables.nth(3);
   await loss.scrollIntoViewIfNeeded();
   await loss.screenshot({path:`${output}/loss-table-fixed.png`});
-  await page.locator('.prose p').filter({has:page.locator('strong').filter({hasText:'数值核对：'})}).screenshot({path:`${output}/numeric-note-fixed.png`});
+  await page.locator('.prose p').filter({hasText:'论文正文将 Overall 增益写为 5.2%'}).screenshot({path:`${output}/numeric-note-fixed.png`});
   checks.push('all 6 MDX tables: every cell matches source; no raw Markdown or KaTeX errors; no article toolbar');
   const article = page.locator('experiment-chart').first();
   await article.scrollIntoViewIfNeeded();
