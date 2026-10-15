@@ -88,7 +88,9 @@ class ExperimentChart extends HTMLElement {
       document.addEventListener('astro:before-swap', () => this.cleanup(), { once: true, signal });
       this.dataset.ready = 'true';
     } catch (error) {
-      this.querySelector('.experiment__help')!.textContent = '图表加载失败，请使用下方数据表。';
+      const status = this.querySelector<HTMLElement>('.experiment__help')!;
+      status.textContent = '图表加载失败，请使用下方数据表。';
+      status.hidden = false;
       this.querySelector('details')?.setAttribute('open', '');
       console.error(error);
     }
@@ -172,7 +174,7 @@ class ExperimentChart extends HTMLElement {
       color = this.chart.getVisual({ seriesIndex: p.seriesIndex, dataIndex: index }, 'color') as string;
     }
     this.querySelector<HTMLElement>('[data-tip-color]')!.style.background = color;
-    this.querySelector('[data-tip-text]')!.textContent = `${c.title}\n${c.xLabel}：${c.categories[p.dataIndex]} · ${s.name}\n${c.metric}：${displayValue(c, s.values[p.dataIndex])}${this.pinned ? '\n已固定 · 点击空白或 Esc 取消' : ''}`;
+    this.querySelector('[data-tip-text]')!.textContent = `${c.title}\n${c.xLabel}：${c.categories[p.dataIndex]} · ${s.name}\n${c.metric}：${displayValue(c, s.values[p.dataIndex])}`;
     tooltip.hidden = false;
     tooltip.style.left = '12px';
     tooltip.style.top = `${this.querySelector<HTMLElement>('.experiment__plot')?.offsetTop ?? 80}px`;
@@ -269,7 +271,9 @@ class ExperimentChart extends HTMLElement {
       anchor.href = url; anchor.download = `${this.config.id}.${format}`; anchor.click();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch (error) {
-      this.querySelector('.experiment__help')!.textContent = '导出失败，请重试或使用数据表。';
+      const status = this.querySelector<HTMLElement>('.experiment__help')!;
+      status.textContent = '导出失败，请重试或使用数据表。';
+      status.hidden = false;
       console.error(error);
     } finally { if (this.isConnected) buttons.forEach(b => b.disabled = false); }
   }

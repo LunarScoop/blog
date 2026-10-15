@@ -21,10 +21,10 @@ const serialized = JSON.stringify(config).replaceAll('<', '\\u003c');
   </div>
   {type !== 'table' && <div class="experiment__plot" tabindex="0" role="group" aria-label={`${config.title}。方向键选择数据，Enter 或空格固定，Escape 取消。`} />}
   <div class="experiment__tooltip" role="status" aria-live="polite" hidden><span data-tip-color /><span data-tip-text /></div>
-  <p class="experiment__help">悬停查看 · 点击或轻触固定 · 再次点击或点空白取消 · 方向键浏览，Enter 固定，Esc 取消。缺失值不绘制。</p>
+  <p class="experiment__help" role="status" hidden />
   <p class="experiment__source"><a href={config.source.url} target="_blank" rel="noopener noreferrer">{config.source.label}</a>：{config.source.note}</p>
   <details class="experiment__data" open={type === 'table'}>
-    <summary>查看数据表（含全部数值与缺失项）</summary>
+    <summary>实验数据</summary>
     <div class="experiment__table-scroll">
       <table>
         <caption>{config.title} — {config.metric}（{config.unit || '无量纲'}）</caption>

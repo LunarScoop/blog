@@ -28,6 +28,8 @@ import experiment from '../../data/experiments/my-run.json';
 
 文章默认隐藏 SVG、PNG 和“取消固定”按钮，仍可通过点击空白、再次点击或 Esc 取消固定。需要导出工具栏时，显式传入 `showControls`，例如 `<ExperimentChart config={experiment} showControls />`；示例页保留该工具栏。
 
+图表正常显示时不附带操作说明，Tooltip 仅显示实验名称、方法和指标值。键盘操作说明保留在图表的无障碍标签中；加载失败时显示状态信息并展开数据表。
+
 目录更深的文章需相应调整导入路径。普通 `.astro` 页面也可直接使用这个组件。文章仍使用原有 frontmatter 和博客布局。
 
 ## 配置字段

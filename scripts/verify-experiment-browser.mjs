@@ -138,12 +138,13 @@ try {
   assert.deepEqual(await page.locator('.prose p,.prose li').evaluateAll(els=>els.map(el=>el.textContent).filter(t=>t.includes('**')||/^\|/.test(t))), []);
   assert.equal(await page.locator('.katex-error').count(),0);
   assert.equal(await page.locator('.prose [data-export],.prose [data-clear]').count(),0);
+  assert.equal(await page.locator('.prose .experiment__help:visible').count(),0);
   assert.equal(await page.locator('.prose p').filter({hasText:'论文正文将 Overall 增益写为 5.2%'}).count(),1);
   assert.equal(await page.locator('.prose p').filter({hasText:'这里沿用正文的'}).count(),1);
   assert.equal(await page.locator('.prose em').filter({hasText:/^图1：不同视角下的关系示意图$/}).count(),1);
   assert.equal(await page.locator('.prose em').filter({hasText:/^图 2：ViewSRD 整体结构。$/}).count(),1);
   const articleText = await page.locator('.prose').innerText();
-  for (const removed of ['这里需要避免把研究动机', '两种协议的数值不能混为', '这是作者提出 SRD 的动机', '依据用户提供的视角示意图重绘', '使用本次提供的截图', '论文中的多视角来自三维场景', '文章日期按本次阅读记录']) {
+  for (const removed of ['这里需要避免把研究动机', '两种协议的数值不能混为', '这是作者提出 SRD 的动机', '依据用户提供的视角示意图重绘', '使用本次提供的截图', '论文中的多视角来自三维场景', '文章日期按本次阅读记录', '以下图表可悬停', '方向键浏览', 'Enter 固定', 'Esc 取消']) {
     assert.ok(!articleText.includes(removed), `Removed editorial wording must stay absent: ${removed}`);
   }
   for (let i=0;i<await tables.count();i++) {
@@ -177,6 +178,7 @@ try {
   await article.screenshot({ path: `${output}/article-chart.png` });
   await article.locator('svg path[fill="#60a5fa"]').first().click();
   assert.equal(await article.getAttribute('data-pinned'),'true');
+  assert.doesNotMatch(await article.locator('[data-tip-text]').textContent(), /点击空白|Esc|Enter/);
   await page.keyboard.press('Escape');
   assert.equal(await article.getAttribute('data-pinned'),null);
   await page.goBack();
