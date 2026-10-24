@@ -1,0 +1,564 @@
+{
+  "paper": {
+    "title": "ORD: Object-Relation Decoupling for Generalized 3D Visual Grounding",
+    "conference": "CVPR 2026",
+    "pages": "30964–30973",
+    "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Huang_ORD_Object-Relation_Decoupling_for_Generalized_3D_Visual_Grounding_CVPR_2026_paper.pdf",
+    "provenance": "Transcribed and visually checked against the supplied paper; reported results, not a training reproduction."
+  },
+  "tables": {
+    "table2": {
+      "CoT3DRef": [
+        73.2,
+        75.2,
+        67.9,
+        67.6,
+        73.5
+      ],
+      "MiKASA": [
+        75.2,
+        78.6,
+        67.3,
+        70.4,
+        75.4
+      ],
+      "ViewSRD": [
+        76.0,
+        78.3,
+        70.6,
+        69.0,
+        76.2
+      ],
+      "ORD": [
+        76.2,
+        78.4,
+        71.0,
+        64.2,
+        76.8
+      ]
+    },
+    "table3": {
+      "CoT3DRef": [
+        64.4,
+        70.0,
+        59.2,
+        61.9,
+        65.7
+      ],
+      "MiKASA": [
+        64.4,
+        69.7,
+        59.4,
+        65.4,
+        64.0
+      ],
+      "ViewSRD": [
+        69.9,
+        75.3,
+        64.8,
+        68.6,
+        70.6
+      ],
+      "ORD": [
+        71.6,
+        76.4,
+        67.0,
+        69.8,
+        72.5
+      ]
+    },
+    "table4": {
+      "MVT": [
+        56.5,
+        56.2,
+        51.7,
+        42.1
+      ],
+      "MiKASA": [
+        62.1,
+        63.4,
+        65.2,
+        56.3
+      ],
+      "CoT3DRef": [
+        61.3,
+        64.4,
+        65.0,
+        57.9
+      ],
+      "ViewSRD": [
+        70.2,
+        68.1,
+        68.5,
+        63.3
+      ],
+      "ORD": [
+        71.5,
+        70.6,
+        71.7,
+        70.5
+      ]
+    },
+    "table5": {
+      "MVT": [
+        55.8,
+        47.2,
+        65.3,
+        70.0,
+        54.6
+      ],
+      "MiKASA": [
+        62.6,
+        57.0,
+        67.3,
+        76.8,
+        62.8
+      ],
+      "CoT3DRef": [
+        64.2,
+        56.3,
+        66.9,
+        77.7,
+        63.2
+      ],
+      "ViewSRD": [
+        71.6,
+        64.6,
+        71.4,
+        80.4,
+        75.2
+      ],
+      "ORD": [
+        73.4,
+        59.7,
+        74.7,
+        70.5,
+        83.0
+      ]
+    },
+    "table6": {
+      "MVT": [
+        0.55,
+        5.76,
+        2.45
+      ],
+      "CoT3DRef": [
+        0.65,
+        4.29,
+        1.96
+      ],
+      "ViewSRD": [
+        0.69,
+        3.11,
+        1.08
+      ],
+      "ORD": [
+        0.81,
+        1.85,
+        1.01
+      ]
+    },
+    "table7": {
+      "w/o Anchors & ROR": [
+        62.2,
+        68.5,
+        56.1,
+        60.1,
+        63.2
+      ],
+      "w/o SFAM (G & P)": [
+        69.1,
+        74.0,
+        64.3,
+        69.1,
+        69.1
+      ],
+      "w/o SFAM G": [
+        69.8,
+        75.9,
+        64.0,
+        68.0,
+        71.4
+      ],
+      "w/o SFAM P": [
+        70.8,
+        76.7,
+        65.1,
+        69.5,
+        70.7
+      ],
+      "w/o SIEM & AIEM": [
+        70.9,
+        76.9,
+        65.1,
+        70.4,
+        71.2
+      ],
+      "w/o AGRM": [
+        71.0,
+        75.5,
+        65.0,
+        67.0,
+        70.6
+      ],
+      "ORD": [
+        71.6,
+        76.4,
+        67.0,
+        69.8,
+        72.5
+      ]
+    },
+    "table8": [
+      {
+        "ref": false,
+        "r": false,
+        "sym": false,
+        "f2r": false,
+        "t2r": false,
+        "overall": 62.2
+      },
+      {
+        "ref": true,
+        "r": false,
+        "sym": false,
+        "f2r": false,
+        "t2r": false,
+        "overall": 64.3
+      },
+      {
+        "ref": true,
+        "r": true,
+        "sym": false,
+        "f2r": false,
+        "t2r": false,
+        "overall": 70.4
+      },
+      {
+        "ref": true,
+        "r": false,
+        "sym": true,
+        "f2r": false,
+        "t2r": false,
+        "overall": 70.1
+      },
+      {
+        "ref": true,
+        "r": true,
+        "sym": true,
+        "f2r": true,
+        "t2r": false,
+        "overall": 71.1
+      },
+      {
+        "ref": true,
+        "r": true,
+        "sym": true,
+        "f2r": false,
+        "t2r": true,
+        "overall": 71.3
+      }
+    ]
+  },
+  "charts": {
+    "nr3d": {
+      "id": "ord-nr3d",
+      "title": "Nr3D：整体与分组定位性能",
+      "kind": "comparison",
+      "chart": "bar",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "评估子集",
+      "categories": [
+        "Overall",
+        "Easy",
+        "Hard",
+        "View Dep.",
+        "View Indep."
+      ],
+      "series": [
+        {
+          "name": "CoT3DRef",
+          "values": [
+            64.4,
+            70.0,
+            59.2,
+            61.9,
+            65.7
+          ]
+        },
+        {
+          "name": "MiKASA",
+          "values": [
+            64.4,
+            69.7,
+            59.4,
+            65.4,
+            64.0
+          ]
+        },
+        {
+          "name": "ViewSRD",
+          "values": [
+            69.9,
+            75.3,
+            64.8,
+            68.6,
+            70.6
+          ]
+        },
+        {
+          "name": "ORD",
+          "values": [
+            71.6,
+            76.4,
+            67.0,
+            69.8,
+            72.5
+          ]
+        }
+      ],
+      "source": {
+        "label": "ORD · 表 3（PDF 第 7 页）",
+        "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Huang_ORD_Object-Relation_Decoupling_for_Generalized_3D_Visual_Grounding_CVPR_2026_paper.pdf",
+        "note": "按原论文表格转录，单位为 %；方法顺序与图例一致。"
+      }
+    },
+    "sr3d": {
+      "id": "ord-sr3d",
+      "title": "Sr3D：模板化关系描述下的定位性能",
+      "kind": "comparison",
+      "chart": "bar",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "评估子集",
+      "categories": [
+        "Overall",
+        "Easy",
+        "Hard",
+        "View Dep.",
+        "View Indep."
+      ],
+      "series": [
+        {
+          "name": "CoT3DRef",
+          "values": [
+            73.2,
+            75.2,
+            67.9,
+            67.6,
+            73.5
+          ]
+        },
+        {
+          "name": "MiKASA",
+          "values": [
+            75.2,
+            78.6,
+            67.3,
+            70.4,
+            75.4
+          ]
+        },
+        {
+          "name": "ViewSRD",
+          "values": [
+            76.0,
+            78.3,
+            70.6,
+            69.0,
+            76.2
+          ]
+        },
+        {
+          "name": "ORD",
+          "values": [
+            76.2,
+            78.4,
+            71.0,
+            64.2,
+            76.8
+          ]
+        }
+      ],
+      "source": {
+        "label": "ORD · 表 2（PDF 第 7 页）",
+        "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Huang_ORD_Object-Relation_Decoupling_for_Generalized_3D_Visual_Grounding_CVPR_2026_paper.pdf",
+        "note": "按表 2 列序转录：ORD Overall 为 76.2%，View Indep. 为 76.8%。"
+      }
+    },
+    "dependent": {
+      "id": "ord-dependent",
+      "title": "视角依赖关系：左、右、前、后",
+      "kind": "comparison",
+      "chart": "bar",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "空间谓词",
+      "categories": [
+        "Left",
+        "Right",
+        "Front",
+        "Behind"
+      ],
+      "series": [
+        {
+          "name": "CoT3DRef",
+          "values": [
+            61.3,
+            64.4,
+            65.0,
+            57.9
+          ]
+        },
+        {
+          "name": "ViewSRD",
+          "values": [
+            70.2,
+            68.1,
+            68.5,
+            63.3
+          ]
+        },
+        {
+          "name": "ORD",
+          "values": [
+            71.5,
+            70.6,
+            71.7,
+            70.5
+          ]
+        }
+      ],
+      "source": {
+        "label": "ORD · 表 4（PDF 第 7 页）",
+        "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Huang_ORD_Object-Relation_Decoupling_for_Generalized_3D_Visual_Grounding_CVPR_2026_paper.pdf",
+        "note": "按原论文表格转录，单位为 %；方法顺序与图例一致。"
+      }
+    },
+    "independent": {
+      "id": "ord-independent",
+      "title": "视角无关关系：距离、夹持与上下关系",
+      "kind": "comparison",
+      "chart": "bar",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "空间谓词",
+      "categories": [
+        "Closest",
+        "Farthest",
+        "Between",
+        "Above",
+        "Under"
+      ],
+      "series": [
+        {
+          "name": "CoT3DRef",
+          "values": [
+            64.2,
+            56.3,
+            66.9,
+            77.7,
+            63.2
+          ]
+        },
+        {
+          "name": "ViewSRD",
+          "values": [
+            71.6,
+            64.6,
+            71.4,
+            80.4,
+            75.2
+          ]
+        },
+        {
+          "name": "ORD",
+          "values": [
+            73.4,
+            59.7,
+            74.7,
+            70.5,
+            83.0
+          ]
+        }
+      ],
+      "source": {
+        "label": "ORD · 表 5（PDF 第 7 页）",
+        "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Huang_ORD_Object-Relation_Decoupling_for_Generalized_3D_Visual_Grounding_CVPR_2026_paper.pdf",
+        "note": "按原论文表格转录，单位为 %；方法顺序与图例一致。"
+      }
+    },
+    "ablation": {
+      "id": "ord-ablation",
+      "title": "Nr3D：组件消融与困难子集表现",
+      "kind": "ablation",
+      "chart": "bar",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "模型配置",
+      "categories": [
+        "w/o Anchors & ROR",
+        "w/o SFAM (G & P)",
+        "w/o SFAM G",
+        "w/o SFAM P",
+        "w/o SIEM & AIEM",
+        "w/o AGRM",
+        "ORD"
+      ],
+      "series": [
+        {
+          "name": "Overall",
+          "values": [
+            62.2,
+            69.1,
+            69.8,
+            70.8,
+            70.9,
+            71.0,
+            71.6
+          ]
+        },
+        {
+          "name": "Hard",
+          "values": [
+            56.1,
+            64.3,
+            64.0,
+            65.1,
+            65.1,
+            65.0,
+            67.0
+          ]
+        },
+        {
+          "name": "View Dep.",
+          "values": [
+            60.1,
+            69.1,
+            68.0,
+            69.5,
+            70.4,
+            67.0,
+            69.8
+          ]
+        }
+      ],
+      "source": {
+        "label": "ORD · 表 7（PDF 第 8 页）",
+        "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Huang_ORD_Object-Relation_Decoupling_for_Generalized_3D_Visual_Grounding_CVPR_2026_paper.pdf",
+        "note": "按原论文表格转录，单位为 %；方法顺序与图例一致。"
+      }
+    }
+  }
+}
