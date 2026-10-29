@@ -1,0 +1,450 @@
+{
+  "paper": {
+    "title": "UZ3DVG: Unaided Zero-Shot 3D Visual Grounding with Generated Language Conditions",
+    "conference": "CVPR 2026",
+    "pages": "9547–9557",
+    "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Tan_UZ3DVG_Unaided_Zero-Shot_3D_Visual_Grounding_with_Generated_Language_Conditions_CVPR_2026_paper.pdf",
+    "code": "https://github.com/tanwb/UZ3DVG",
+    "provenance": "Transcribed from the supplied PDF and checked against rendered tables and plots; reported experiments, not an independent training reproduction."
+  },
+  "tables": {
+    "table1Mask3d": {
+      "ZSVG3D": [
+        63.8,
+        58.4,
+        27.7,
+        24.6,
+        36.4,
+        32.7,
+        0.14
+      ],
+      "SeeGround": [
+        75.7,
+        68.9,
+        34.0,
+        30.0,
+        44.1,
+        39.4,
+        0.2
+      ],
+      "UZ3DVG": [
+        73.57,
+        68.15,
+        40.49,
+        36.33,
+        45.42,
+        41.08,
+        7.69
+      ]
+    },
+    "table1NonMask3d": {
+      "ZSVG3D": [
+        32.5,
+        27.8,
+        16.1,
+        14.6,
+        20.0,
+        17.6,
+        0.21
+      ],
+      "UZ3DVG": [
+        69.62,
+        56.94,
+        38.48,
+        31.21,
+        43.13,
+        35.05,
+        9.43
+      ]
+    },
+    "table2": {
+      "ZSVG3D": [
+        46.5,
+        31.7,
+        36.8,
+        40.0,
+        39.0
+      ],
+      "SeeGround": [
+        54.5,
+        38.3,
+        42.3,
+        48.2,
+        46.1
+      ],
+      "UZ3DVG": [
+        52.2,
+        40.8,
+        39.3,
+        50.1,
+        46.5
+      ]
+    },
+    "table3": {
+      "Baseline": [
+        40.75,
+        37.18
+      ],
+      "+ TSVDE": [
+        41.83,
+        38.21
+      ],
+      "+ TSVDE + RCD": [
+        43.26,
+        39.65
+      ],
+      "+ TSVDE + GeoSM": [
+        43.15,
+        39.47
+      ],
+      "UZ3DVG": [
+        45.42,
+        41.08
+      ]
+    },
+    "table4": {
+      "2D Info": [
+        34.16,
+        22.83
+      ],
+      "MSAG-RC w/o RC": [
+        43.15,
+        39.47
+      ],
+      "MSAG-RC": [
+        45.42,
+        41.08
+      ]
+    },
+    "figure3a": {
+      "Qwen3-VL-Plus": [
+        43.87,
+        39.62
+      ],
+      "Doubao-seed-1.6": [
+        45.42,
+        41.08
+      ]
+    },
+    "figure3b": {
+      "10K": [
+        25.71,
+        21.14
+      ],
+      "20K": [
+        36.88,
+        30.65
+      ],
+      "30K": [
+        43.36,
+        39.52
+      ],
+      "40K": [
+        45.42,
+        41.08
+      ]
+    }
+  },
+  "charts": {
+    "scanrefer": {
+      "id": "uz3dvg-scanrefer",
+      "title": "ScanRefer：Mask3D 配置下的 Acc@0.5",
+      "kind": "comparison",
+      "chart": "bar",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 2,
+      "xLabel": "评估子集",
+      "categories": [
+        "Unique",
+        "Multiple",
+        "Overall"
+      ],
+      "series": [
+        {
+          "name": "ZSVG3D",
+          "values": [
+            58.4,
+            24.6,
+            32.7
+          ]
+        },
+        {
+          "name": "SeeGround",
+          "values": [
+            68.9,
+            30.0,
+            39.4
+          ]
+        },
+        {
+          "name": "UZ3DVG",
+          "values": [
+            68.15,
+            36.33,
+            41.08
+          ]
+        }
+      ],
+      "source": {
+        "label": "UZ3DVG · 表 1（PDF 第 6 页）",
+        "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Tan_UZ3DVG_Unaided_Zero-Shot_3D_Visual_Grounding_with_Generated_Language_Conditions_CVPR_2026_paper.pdf",
+        "note": "Mask3D-Based 三组结果；UZ3DVG 使用 Mask3D 进行预测后的边界框细化。"
+      }
+    },
+    "nonMask3d": {
+      "id": "uz3dvg-non-mask3d",
+      "title": "ScanRefer：无 Mask3D 的定位准确率",
+      "kind": "comparison",
+      "chart": "bar",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 2,
+      "xLabel": "评价指标",
+      "categories": [
+        "Overall Acc@0.25",
+        "Overall Acc@0.5"
+      ],
+      "series": [
+        {
+          "name": "ZSVG3D",
+          "values": [
+            20.0,
+            17.6
+          ]
+        },
+        {
+          "name": "UZ3DVG",
+          "values": [
+            43.13,
+            35.05
+          ]
+        }
+      ],
+      "source": {
+        "label": "UZ3DVG · 表 1（PDF 第 6 页）",
+        "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Tan_UZ3DVG_Unaided_Zero-Shot_3D_Visual_Grounding_with_Generated_Language_Conditions_CVPR_2026_paper.pdf",
+        "note": "Non-Mask3D 配置；ZSVG3D 为 0.21 FPS，UZ3DVG 为 9.43 FPS。"
+      }
+    },
+    "nr3d": {
+      "id": "uz3dvg-nr3d",
+      "title": "Nr3D：跨数据集直接推理的定位性能",
+      "kind": "comparison",
+      "chart": "bar",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 1,
+      "xLabel": "评估子集",
+      "categories": [
+        "Easy",
+        "Hard",
+        "View Dep.",
+        "View Indep.",
+        "Overall"
+      ],
+      "series": [
+        {
+          "name": "ZSVG3D",
+          "values": [
+            46.5,
+            31.7,
+            36.8,
+            40.0,
+            39.0
+          ]
+        },
+        {
+          "name": "SeeGround",
+          "values": [
+            54.5,
+            38.3,
+            42.3,
+            48.2,
+            46.1
+          ]
+        },
+        {
+          "name": "UZ3DVG",
+          "values": [
+            52.2,
+            40.8,
+            39.3,
+            50.1,
+            46.5
+          ]
+        }
+      ],
+      "source": {
+        "label": "UZ3DVG · 表 2（PDF 第 7 页）",
+        "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Tan_UZ3DVG_Unaided_Zero-Shot_3D_Visual_Grounding_with_Generated_Language_Conditions_CVPR_2026_paper.pdf",
+        "note": "UZ3DVG 沿用 ScanRefer 伪标注训练的检查点，无 Nr3D 微调，采用 Mask3D 细化；图中三种方法均为完整验证集结果。"
+      }
+    },
+    "ablation": {
+      "id": "uz3dvg-ablation",
+      "title": "ScanRefer：语义采样、推理蒸馏与几何建模",
+      "kind": "ablation",
+      "chart": "bar",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 2,
+      "xLabel": "模型配置",
+      "categories": [
+        "Baseline",
+        "+ TSVDE",
+        "+ TSVDE + RCD",
+        "+ TSVDE + GeoSM",
+        "UZ3DVG"
+      ],
+      "series": [
+        {
+          "name": "Acc@0.25",
+          "values": [
+            40.75,
+            41.83,
+            43.26,
+            43.15,
+            45.42
+          ]
+        },
+        {
+          "name": "Acc@0.5",
+          "values": [
+            37.18,
+            38.21,
+            39.65,
+            39.47,
+            41.08
+          ]
+        }
+      ],
+      "source": {
+        "label": "UZ3DVG · 表 3（PDF 第 7 页）",
+        "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Tan_UZ3DVG_Unaided_Zero-Shot_3D_Visual_Grounding_with_Generated_Language_Conditions_CVPR_2026_paper.pdf",
+        "note": "按原论文转录；数值为准确率（%），文中增益以百分点表示。"
+      }
+    },
+    "annotation": {
+      "id": "uz3dvg-annotation",
+      "title": "ScanRefer：空间伪标注与推理链的作用",
+      "kind": "ablation",
+      "chart": "bar",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 2,
+      "xLabel": "标注生成配置",
+      "categories": [
+        "2D Info",
+        "MSAG-RC w/o RC",
+        "MSAG-RC"
+      ],
+      "series": [
+        {
+          "name": "Acc@0.25",
+          "values": [
+            34.16,
+            43.15,
+            45.42
+          ]
+        },
+        {
+          "name": "Acc@0.5",
+          "values": [
+            22.83,
+            39.47,
+            41.08
+          ]
+        }
+      ],
+      "source": {
+        "label": "UZ3DVG · 表 4（PDF 第 8 页）",
+        "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Tan_UZ3DVG_Unaided_Zero-Shot_3D_Visual_Grounding_with_Generated_Language_Conditions_CVPR_2026_paper.pdf",
+        "note": "按原论文转录；数值为准确率（%），文中增益以百分点表示。"
+      }
+    },
+    "vlms": {
+      "id": "uz3dvg-vlms",
+      "title": "ScanRefer：伪标注生成 VLM 的选择",
+      "kind": "comparison",
+      "chart": "bar",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 2,
+      "xLabel": "标注生成模型",
+      "categories": [
+        "Qwen3-VL-Plus",
+        "Doubao-seed-1.6"
+      ],
+      "series": [
+        {
+          "name": "Acc@0.25",
+          "values": [
+            43.87,
+            45.42
+          ]
+        },
+        {
+          "name": "Acc@0.5",
+          "values": [
+            39.62,
+            41.08
+          ]
+        }
+      ],
+      "source": {
+        "label": "UZ3DVG · 图 3(a)（PDF 第 8 页）",
+        "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Tan_UZ3DVG_Unaided_Zero-Shot_3D_Visual_Grounding_with_Generated_Language_Conditions_CVPR_2026_paper.pdf",
+        "note": "按原论文转录；数值为准确率（%），文中增益以百分点表示。"
+      }
+    },
+    "scale": {
+      "id": "uz3dvg-scale",
+      "title": "ScanRefer：空间描述伪标注的数据规模",
+      "kind": "training",
+      "chart": "line",
+      "metric": "Grounding accuracy",
+      "unit": "%",
+      "valueFormat": "percent",
+      "decimals": 2,
+      "xLabel": "伪标注数量",
+      "categories": [
+        "10K",
+        "20K",
+        "30K",
+        "40K"
+      ],
+      "series": [
+        {
+          "name": "Acc@0.25",
+          "values": [
+            25.71,
+            36.88,
+            43.36,
+            45.42
+          ]
+        },
+        {
+          "name": "Acc@0.5",
+          "values": [
+            21.14,
+            30.65,
+            39.52,
+            41.08
+          ]
+        }
+      ],
+      "source": {
+        "label": "UZ3DVG · 图 3(b)（PDF 第 8 页）",
+        "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Tan_UZ3DVG_Unaided_Zero-Shot_3D_Visual_Grounding_with_Generated_Language_Conditions_CVPR_2026_paper.pdf",
+        "note": "横轴为训练伪标注数量（10K–40K），各点为对应数据规模下的验证准确率。"
+      }
+    }
+  }
+}
